@@ -1,0 +1,34 @@
+<div class="margin-header"></div>
+<div class="container">
+	<form id="form-edit-profile" #editProfile="ngForm" (ngSubmit)="updateProfile()">
+		<div class="header-profile">
+			<div>
+				<div>
+					<div class="hover-avatar"></div>
+					<img src="{{resources}}user-icon.png" alt="Icono de usuario">
+				</div>
+				<input id="avatar-user" type="file" class="hidden">
+				<h1>{{loguedUser.name + ' ' + loguedUser.surname}}</h1>
+			</div>
+			<div>
+				<h4>Mi perf&iacute;l</h4>
+				<span (click)="showEdit()" title="Editar mi perf&iacute;l" id="edit-profile" class="fa fa-pencil"></span>
+			</div>
+		</div>
+		<div class="body-profile">
+			<label for="edit-name">
+				<span>Nombre(s):</span>
+				<input id="edit-name" type="text" class="iptText" name="name" #name="ngModel" [(ngModel)]="loguedUser.name" readonly>
+			</label>
+			<label for="edit-surname">
+				<span>Apellidos (o solo el primero):</span>
+				<input id="edit-surname" type="text" class="iptText" name="surname" #surname="ngModel" [(ngModel)]="loguedUser.surname" readonly>
+			</label>
+			<label for="edit-email">
+				<span>Email:</span>
+				<input id="edit-email" type="text" class="iptEmail" name="email" #email="ngModel" [(ngModel)]="loguedUser.email" readonly>
+			</label>
+			<input class="btn-default" type="submit" value="Actualizar" disabled>
+		</div>
+	</form>
+</div>

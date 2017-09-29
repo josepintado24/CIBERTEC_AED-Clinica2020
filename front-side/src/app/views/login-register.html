@@ -1,0 +1,94 @@
+<div class="modal log-reg-messages">
+	<span class="modal-close fa fa-times"></span>
+	<p *ngIf="status">Usuario registrado correctamente. ¡Bienvenido!, <a (click)="loginHere()">Ingresa desde aqu&iacute;</a></p>
+	<p *ngIf="!status">Error al intentar registrar el usuario. Intente nuevamente.</p>
+	<p *ngIf="statusLogin">{{statusLogin}}</p>
+</div>
+
+<div class="modal-user">
+	<div>
+		<img src="{{resources}}zoo-brand-white.png" alt="">
+		<h2>{{title}}</h2>
+		<span>{{subtitle}}</span>
+		<p>{{description}}</p>
+		<h4>Cont&aacute;ctanos por nuestras redes sociales:</h4>
+		<ul class="media">
+			<li><a href="" class="fa fa-facebook"></a></li>
+			<li><a href="" class="fa fa-twitter"></a></li>
+			<li><a href="" class="fa fa-whatsapp"></a></li>
+		</ul>
+	</div>
+	<div>
+		<div class="close-modal"><i class="fa fa-times"></i></div>
+		<nav class="user-nav">
+			<a class="nav-login nav-active" href="">Login</a>
+			<span>/</span>
+			<a class="nav-register" href="">Registro</a>
+			<span class="hidden">/</span>
+			<a class="nav-forgot hidden" href="">Forgot</a>
+		</nav>
+		<div class="forms">
+			<form #loginForm="ngForm" (ngSubmit)="loginSubmit(loginForm)" id="login-form">
+				<label class="user" for="">
+					<span class="lblText">Email:</span>
+					<input #name="ngModel" name="user" [(ngModel)]="user.email" id="user" class="iptEmail" type="text" placeholder="Email" value="{{localLoginUser}}" data-validate="false">
+				</label>
+				<label class="password" for="">
+					<span class="lblText">Contrase&ntilde;a:</span>
+					<input #password="ngModel" name="password" [(ngModel)]="user.password" class="iptPass" type="password" placeholder="Contrase&ntilde;a" data-validate="false">
+				</label>
+				<div>
+					<label class="remember" for="remember">
+						<input id="remember" type="checkbox">
+						<i class="ipt-check"></i>
+						<span>Recu&eacute;rdame</span>
+					</label>
+					<label class="forgot" for="">
+						<span>Olvid&eacute; mi contrase&ntilde;a</span>
+						<i class="fa fa-question-circle"></i>
+					</label>
+				</div>
+				<input id="login-submit" class="btn-default form-submit" type="submit" value="Ingresar" disabled>
+			</form>
+			<form #registerForm="ngForm" (ngSubmit)="registerSubmit(registerForm)" id="register-form" class="hidden">
+				<div>
+					<label for="">
+						<span class="lblText">Nombre:</span>
+						<input #name="ngModel" name="name" [(ngModel)]="user.name" class="iptText" type="text" placeholder="Nombre" data-validate="false">
+					</label>
+					<label for="">
+						<span class="lblText">Apellidos:</span>
+						<input #surname="ngModel" name="surname" [(ngModel)]="user.surname" class="iptText" type="text" placeholder="Apellidos" data-validate="false">
+					</label>
+				</div>
+				<label for="">
+					<span class="lblText">E-mail:</span>
+					<input #email="ngModel" name="email" [(ngModel)]="user.email" class="iptEmail" type="text" placeholder="E-mail" data-validate="false">
+				</label>
+				<label for="">
+					<span class="lblText">Contrase&ntilde;a:</span>
+					<input #password="ngModel" name="password" [(ngModel)]="user.password" class="iptPass" type="password" placeholder="Contrase&ntilde;a" data-validate="false">
+				</label>
+				<label for="">
+					<span class="lblText">Confirmar contrase&ntilde;a:</span>
+					<input class="iptConfirmPass" type="password" placeholder="Confirmar contrase&ntilde;a" data-validate="false">
+				</label>
+				<input id="register-submit" class="btn-default form-submit" type="submit" value="Registrarme" disabled>
+			</form>
+			<form id="forgot-form" class="hidden">
+				<h3>&iquest;Olvidaste tu contrase&ntilde;a?</h3>
+				<p>No te preocupes, solo dinos tu cuenta de correo con la que te registraste y nosotros te enviaremos una nueva contrase&ntilde;a.</p>
+				<label for="">
+					<span class="lblText">E-mail:</span>
+					<input class="iptEmail" type="text" placeholder="E-mail">
+				</label>
+			</form>
+		</div>
+		<p><span>Tambi&eacute;n puedes ingresar con</span></p>
+		<ul class="login-with">
+			<li><a href=""><i class="fa fa-facebook"></i>Facebook</a></li>
+			<li><a href=""><i class="fa fa-twitter"></i>Twitter</a></li>
+			<li><a href=""><i class="fa fa-google-plus"></i>Google +</a></li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+<h2>Lista de datos guardados</h2>
+
+<table>
+	<thead>
+		<tr>
+			<td>N&deg;</td>
+			<td>Nombre</td>
+			<td>A&ntilde;o</td>
+			<td>Acci&oacute;n</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let data of data; let i = index;">
+			<td>{{i+1}}</td>
+			<td>Oso panda</td>
+			<td>2012</td>
+			<td class="table-buttons">
+				<button><i class="fa fa-eye"></i>Ver</button>
+				<button><i class="fa fa-pencil"></i>Editar</button>
+				<button><i class="fa fa-trash"></i>Borrar</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

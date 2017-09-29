@@ -1,0 +1,12 @@
+<div class="banner">
+	<div class="back-banner"></div>
+	<img src="{{resources}}zoo-wallpaper.jpg" alt="">
+	<div class="welcome container">
+		<h4>Bienvenido a ZOO</h4>
+		<div>
+			<p>Dinos tu nombre para una experiencia m&aacute;s personalizada.</p>
+			<input [(ngModel)]="user" class="user-name" type="text" placeholder="Tu nombre">
+			<input (click)="sendUser()" class="btn-default" type="button" value="Enviar">
+		</div>
+	</div>
+</div>
