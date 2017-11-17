@@ -7,15 +7,21 @@ import { AdminComponent } from './admin.component';
 import { ListDataComponent } from './components/list.component';
 import { AddDataComponent } from './components/add.component';
 import { EditDataComponent } from './components//edit.component';
+import { ModalsAdminComponent } from './components/modals-admin.component';
+import { SelectAnimalComponent } from './components/select-animal.component';
 
 import { AdminRouting } from './admin.routing';
+import { AdminGuards } from '../services/admin.guard';
+import { General } from '../services/general';
 
 @NgModule({
 	declarations: [
 		AdminComponent,
 		ListDataComponent,
 		AddDataComponent,
-		EditDataComponent
+		EditDataComponent,
+		ModalsAdminComponent,
+		SelectAnimalComponent
 	],
 	imports: [
 		CommonModule,
@@ -23,7 +29,10 @@ import { AdminRouting } from './admin.routing';
 		HttpModule,
 		AdminRouting
 	],
-	providers: []
+	providers: [
+		AdminGuards,
+		General
+	]
 })
 
 export class AdminModule {}

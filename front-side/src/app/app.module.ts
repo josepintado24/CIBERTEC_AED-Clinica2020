@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home.component';
 import { LoginRegisterComponent } from './components/login-register.component';
 import { ProfileComponent } from './components/profile.component';
+import { ModalsComponent } from './components/modals.component';
+import { PageRedirectComponent } from './components/page-redirect.component';
 
 import { routing, appRoutingProviders } from './app.routing';
 import { AdminModule } from './admin/admin.module';
@@ -16,7 +18,9 @@ import { AdminModule } from './admin/admin.module';
     AppComponent,
     HomeComponent,
     LoginRegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    ModalsComponent,
+    PageRedirectComponent
   ],
   imports: [
     BrowserModule,

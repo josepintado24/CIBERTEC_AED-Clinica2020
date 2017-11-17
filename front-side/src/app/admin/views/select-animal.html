@@ -1,0 +1,14 @@
+<div id="select-animal">
+	<h2>Seleccionar el animal a editar</h2>
+
+	<div class="dropdown">
+		<span class="drop-toggle" (click)="dropToggle($event)">Seleccionar animal <i class="fa fa-chevron-down"></i></span>
+		<ul class="drop-list">
+			<li class="drop-item" *ngFor="let oneAnimal of animal">
+				<a [routerLink]="['/admin/edit-data', oneAnimal._id]">{{oneAnimal.name}}</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<edit-data *ngIf="animal != undefined"></edit-data>

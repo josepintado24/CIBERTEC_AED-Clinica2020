@@ -1,31 +1,43 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { ConfigWeb } from './services/configWeb';
 import { General } from './services/general';
+import { User } from './models/user.model';
+import { UserService } from './services/user.service';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	providers: [ General ]
+	providers: [ General, UserService ]
 })
 export class AppComponent implements OnInit, DoCheck {
 	public resources: string;
 	public localUser: string;
 	public loguedUser;
 	public letterIcon: string;
+	public dbImages: string;
+	public user: User;
 
-	constructor(private general: General){
+	constructor(
+		private _general: General,
+		private _userService: UserService
+	){
 		this.resources = ConfigWeb.resourcesImages;
+		this.dbImages = ConfigWeb.dbImages;
 	}
 
 	ngOnInit(){
-		this.loguedUser = this.general.getIdentity();
-		this.getLetter();
+		this.loguedUser = this._general.getIdentity();
+		this.letterIcon = this._general.getLetter();
+		this.user = this.loguedUser;
 	}
 
 	ngDoCheck(){
 		this.localUser = localStorage.getItem('user');
 		this.headerBack();
+		this.maleFemaleIcon();
 	}
+
+	prevent(ev){ this._general.prevent(ev); }
 
 	removeUser(){
 		localStorage.removeItem('user');
@@ -37,14 +49,6 @@ export class AppComponent implements OnInit, DoCheck {
 
 	hideUserOption(){
 		$('.user-option').slideUp('fast');
-	}
-
-	getLetter(){
-		if(this.loguedUser){
-			var firstLetter = this.loguedUser.name.charAt(0).toLowerCase();
-			var lastLetter = this.loguedUser.surname.charAt(0).toLowerCase();
-			this.letterIcon = firstLetter + lastLetter;
-		}
 	}
 
 	logOut(){
@@ -65,5 +69,16 @@ export class AppComponent implements OnInit, DoCheck {
 				backgroundColor: 'transparent',
 				boxShadow: 'none'
 			});
+	}
+
+	maleFemaleIcon(){
+		var newUser = this._general.getIdentity();
+		if(newUser != null && newUser.image == null){
+			if(newUser.gender == 'Femenino')
+				newUser.image = 'female-avatar.jpg';
+			else
+				newUser.image = 'male-avatar.jpg';
+		}
+		localStorage.setItem('identity', JSON.stringify(newUser));
 	}
 }

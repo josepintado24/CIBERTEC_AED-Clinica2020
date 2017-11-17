@@ -13,10 +13,10 @@
 			<li><a [routerLink]="['/contacto']" [routerLinkActive]="['active']">Contacto</a></li>
 			<li *ngIf="!loguedUser"><a id="show-login" href="#usuario">Iniciar sesión / Registro</a></li>
 			<li *ngIf="loguedUser" class="logued-user" (mouseleave)="hideUserOption()">
-				<a href="#" id="logued-user" (mouseover)="showUserOption()">{{loguedUser.name}}<img src="{{resources}}user-icon.png"></a>
+				<a href="#" id="logued-user" (mouseover)="showUserOption()">{{loguedUser.name}}<img src="{{dbImages + user.image}}" class="icon-user"></a>
 				<ul class="user-option">
 					<li>
-						<a class="option-submenu" href="">
+						<a class="option-submenu" href="" (click)="prevent($event)">
 							<span class="letter-icon">{{letterIcon}}</span>
 							<span>
 								<span>{{loguedUser.name + ' ' + loguedUser.surname}}</span>
@@ -26,6 +26,7 @@
 						</a>
 					</li>
 					<li><a [routerLink]="['/perfil']" href="" class="option-submenu"><span class="fa fa-user-o"></span>Mi perf&iacute;l</a></li>
+					<li *ngIf="user.role == 'ROLE_ADMIN'"><a [routerLink]="['/admin']" class="option-submenu"><span class="fa fa-cogs"></span>Admin Zoo</a></li>
 					<li><a (click)="logOut()" href="" class="option-submenu"><span class="fa fa-sign-out"></span>Cerrar sesión</a></li>
 				</ul>
 			</li>

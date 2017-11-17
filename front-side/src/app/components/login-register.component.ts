@@ -27,7 +27,7 @@ export class LoginRegisterComponent implements OnInit {
 	public message: string;
 	public identity;
 	public token;
-	public statusLogin;
+	public messageIdentity;
 
 	constructor(
 		private _userService: UserService,
@@ -42,7 +42,7 @@ export class LoginRegisterComponent implements OnInit {
 		this.nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]{2,30}$/i;
 		this.passRegex = /^[-\w.+]{6,24}$/;
 		this.emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-		this.user = new User('', '', '', '', '', 'ROLE_USER', '');
+		this.user = new User('', '', '', '', '', 'ROLE_USER', '', '');
 		this.statusRegister = false;
 		this.message = '.modal';
 	}
@@ -62,6 +62,7 @@ export class LoginRegisterComponent implements OnInit {
 			ob.validateInput();
 			ob.remember();
 			ob._general.closeModal();
+			ob.getGenero();
 		}
 		window.setTimeout(functions, 1);
 	}
@@ -71,20 +72,25 @@ export class LoginRegisterComponent implements OnInit {
 			response => {
 				if(response.user && response.user._id){
 					console.log('Registro correcto');
-					this.statusRegister = true;
+					this.messageIdentity = response.message;
 					$('.log-reg-messages').css('backgroundColor', 'rgba(83, 162, 83, 0.7)');
 					registerForm.reset();
 					$('.ipt-error, .ipt-correct').css({right: '-20px', opacity: '0'});
 					$('.iptConfirmPass').val('');
 				}
 				else{
-					console.log('Error en el registro');
-					this.statusRegister = false;
+					this.messageIdentity = response.message;
 					$('.log-reg-messages').css('backgroundColor', 'rgba(181, 51, 51, 0.7)');
 				}
 				$(this.message).slideDown('fast');
 			},
-			error => console.log(<any>error)
+			error => {
+				if(<any>error != null) {
+					var bodyErr = JSON.parse(error._body);
+					this.messageIdentity = bodyErr.message;
+					$(this.message).slideDown('fast');
+				}
+			}
 		);
 	}
 
@@ -111,14 +117,14 @@ export class LoginRegisterComponent implements OnInit {
 								location.reload();
 							}
 						},
-						error => console.log(error)
+						error => console.log(<any>error)
 					);
 				}
 			},
 			error => {
 				if(<any>error != null) {
 					var bodyErr = JSON.parse(error._body);
-					this.statusLogin = bodyErr.message;
+					this.messageIdentity = bodyErr.message;
 					$(this.message).slideDown('fast');
 				}
 			}
@@ -216,13 +222,12 @@ export class LoginRegisterComponent implements OnInit {
 		
 		var modalHeight = $('.modal-user').height();
 		$('.modal-user').css('top', 'calc(50% - ' + modalHeight/2 +'px)');
-
-		if($('.modal-user').height() > window.innerHeight) $('.modal-user').css('top', 0);
 	}
 
 	loginOrRegister(){
 		$('.forgot').click(() => $('.nav-forgot').click());
 		$('.user-nav a').click((ev) => {
+			$(this.message).slideUp();
 			ev.preventDefault();
 			var target = ev.target;
 			if(!$(target).is('.nav-active')){
@@ -272,6 +277,20 @@ export class LoginRegisterComponent implements OnInit {
 				opacity: 0,
 				right: '-20px'
 			});
+		});
+	}
+
+	dropToggle(ev){
+		this._general.dropToggle(ev);
+	}
+
+	getGenero(){
+		var iptGenero = $('#gender').val();
+		$('#dropdown-gender .drop-item').click((ev) => {
+			var target = ev.target;
+			var gender = $(target).text();
+			$('#dropdown-gender #gender').val(gender);
+			this.user.gender = gender;
 		});
 	}
 }

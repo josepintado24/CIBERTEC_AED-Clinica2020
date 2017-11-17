@@ -3,13 +3,17 @@ import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ConfigWeb } from './configWeb';
+import { General } from './general';
 
 @Injectable()
 
 export class UserService {
 	public apiUrl: string;
 
-	constructor(private _http: Http){
+	constructor(
+		private _http: Http,
+		private _general: General
+	){
 		this.apiUrl = ConfigWeb.apiUrl;
 	}
 
@@ -33,11 +37,14 @@ export class UserService {
 			.map(res => res.json());
 	}
 
-	updateUser(userToUpdate, id){
+	updateUser(userToUpdate){
 		let params = JSON.stringify(userToUpdate);
-		let headers = new Headers({'Content-Type': 'application/json'});
+		let headers = new Headers({
+			'Content-Type': 'application/json',
+			'Authorization': this._general.getToken()
+		});
 
-		return this._http.put(this.apiUrl + 'update-user/' + id, params, {headers: headers})
+		return this._http.put(this.apiUrl + 'update-user/' + userToUpdate._id, params, {headers: headers})
 			.map(res => res.json());
 	}
 }

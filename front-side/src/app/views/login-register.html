@@ -1,8 +1,8 @@
 <div class="modal log-reg-messages">
 	<span class="modal-close fa fa-times"></span>
-	<p *ngIf="status">Usuario registrado correctamente. ¡Bienvenido!, <a (click)="loginHere()">Ingresa desde aqu&iacute;</a></p>
-	<p *ngIf="!status">Error al intentar registrar el usuario. Intente nuevamente.</p>
-	<p *ngIf="statusLogin">{{statusLogin}}</p>
+	<!-- <p *ngIf="status">Usuario registrado correctamente. ¡Bienvenido!, <a (click)="loginHere()">Ingresa desde aqu&iacute;</a></p> -->
+	<!-- <p *ngIf="!status">Error al intentar registrar el usuario. Intente nuevamente.</p> -->
+	<p *ngIf="messageIdentity">{{messageIdentity}}</p>
 </div>
 
 <div class="modal-user">
@@ -65,6 +65,17 @@
 					<span class="lblText">E-mail:</span>
 					<input #email="ngModel" name="email" [(ngModel)]="user.email" class="iptEmail" type="text" placeholder="E-mail" data-validate="false">
 				</label>
+				<div class="dropdown" id="dropdown-gender">
+					<span class="lblText">Sexo:</span>
+					<label>
+						<input id="gender" type="text" class="drop-toggle" (click)="dropToggle($event)" #genero="ngModel" name="genero" [(ngModel)]="user.genero" placeholder="Género" readonly>
+						<span class="fa fa-chevron-down"></span>
+						<ul class="drop-list">
+							<li class="drop-item" data-value="M">Masculino</li>
+							<li class="drop-item" data-value="F">Femenino</li>
+						</ul>
+					</label>
+				</div>
 				<label for="">
 					<span class="lblText">Contrase&ntilde;a:</span>
 					<input #password="ngModel" name="password" [(ngModel)]="user.password" class="iptPass" type="password" placeholder="Contrase&ntilde;a" data-validate="false">

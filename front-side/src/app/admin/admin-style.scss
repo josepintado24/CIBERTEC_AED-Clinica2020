@@ -1,13 +1,33 @@
 $font-default: 'Varela round', sans-serif;
 $font-title: 'Viga', sans-serif;
 $font-size: 14px;
+$awesome: 'FontAwesome';
 $transition: 0.25s;
 $font-white: #eee;
 $red-color: #b53333;
 $green-color: #365935;
+$lightgreen: #53a253;
 $font-dark: #444;
 $font-gray: #b9b9b9;
 $lightgray: #ececec;
+$border: #ddd;
+
+.btn-default {
+	line-height: 40px;
+	border: 2px solid $green-color;
+	padding: 0 30px;
+	border-radius: 5px;
+	cursor: pointer;
+	color: $green-color;
+	transition: $transition;
+	background-color: transparent;
+	font-family: $font-default;
+	outline: none;
+	&:hover {
+		color: $font-white;
+		background-color: $green-color;
+	}
+}
 
 #header-admin {
 	position: relative;
@@ -19,9 +39,72 @@ $lightgray: #ececec;
 	background-color: $font-white;
 	line-height: 70px;
 	& > img { width: 120px; }
-	.user-admin img {
-		width: 50px;
-		margin-left: 15px;
+	.user-admin { 
+		img {
+			width: 50px;
+			margin-left: 15px;
+			cursor: pointer;
+			position: relative;
+		}
+		.menu-user-admin {
+			position: absolute;
+			background-color: $font-white;
+			padding: 30px;
+			top: 75px;
+			right: 20px;
+			list-style: none;
+			border-radius: 5px;
+			display: none;
+			&::before {
+				content: '\f0d8';
+				font-family: $awesome;
+				position: absolute;
+				line-height: 10px;
+				font-size: 34px;
+				top: -8px;
+				right: 14px;
+				color: $font-white;
+			}
+			li {
+				line-height: 40px;
+				border-bottom: 1px solid $border;
+				&:first-child { padding-bottom: 10px; }
+				&:last-child { border: none; }
+				&:first-child span:not(.letter-icon) {
+					line-height: 14px;
+					.logued-mail {
+						font-size: 10px;
+						color: $lightgreen;
+					}
+				}
+			}
+			a {
+				display: flex;
+				align-items: center;
+				text-decoration: none;
+				color: $font-dark;
+				font-size: 12px;
+				height: 40px;
+				span.fa {
+					color: $lightgreen;
+					width: 42px;
+					text-align: center;
+					font-size: 14px;
+					margin-right: 7px;
+				}
+				.letter-icon {
+					display: inline-block;
+					line-height: 40px;
+					width: 42px;
+					text-align: center;
+					border: 1px solid $lightgreen;
+					color: $lightgreen;
+					border-radius: 50%;
+					margin-right: 7px;
+					font-size: 14px;
+				}
+			}
+		}
 	}
 }
 
@@ -115,7 +198,7 @@ table {
 }
 
 #form-add {
-	& > div {
+	.data-add {
 		display: flex;
 		justify-content: space-between;
 		label {
@@ -126,22 +209,26 @@ table {
 				&::placeholder { color: $font-gray; }
 			}
 		}
+		#year { cursor: pointer; }
 		.dropdown {
 			width: 40%;
 			margin-left: 30px;
 			color: $font-gray;
 			position: relative;
 		}
-		label input, .drop-toggle {
+		.drop-toggle {
+			display: flex !important;
+			justify-content: space-between;
+			align-items: center;
+		}
+		label input {
 			display: block;
 			border: none;
 			border-bottom: 2px solid $green-color;
 			line-height: 40px;
 			padding: 0 10px;
 			outline: none;
-			cursor: pointer;
 		}
-		.drop-toggle i { float: right; line-height: 40px; }
 		.drop-list {
 			position: absolute;
 			background-color: white;
@@ -176,19 +263,97 @@ table {
 		border-bottom: 2px solid $green-color;
 		&::placeholder { color: $font-gray; }
 	}
-	input[type="submit"] {
-		line-height: 40px;
-		border: 2px solid $green-color;
-		padding: 0 30px;
-		border-radius: 5px;
-		cursor: pointer;
-		color: $green-color;
-		transition: $transition;
-		background-color: transparent;
-		font-family: $font-default;
-		&:hover {
-			color: $font-white;
-			background-color: $green-color;
+	.image-add {
+		display: flex;
+		align-items: flex-start;
+		.animal-image {
+			display: block;
+			line-height: 200px;
+			max-width: 200px;
+			width: 100%;
+			background-color: $lightgray;
+			text-align: center;
+			margin-bottom: 30px;
+			color: $font-gray;
+			border-radius: 5px;
+			margin-right: 20px;
 		}
+		.info {
+			color: $lightgreen;
+			font-size: 12px;
+			display: flex;
+			align-items: center;
+			margin: 20px 0;
+			.fa {
+				margin-right: 10px;
+				font-size: 20px;
+				color: $green-color;
+			}
+		}
+		.file-name {
+			display: block;
+			margin: 10px 0;
+			font-size: 12px;
+			color: $font-gray;
+			.fa {
+				color: $red-color;
+				display: inline-block;
+				line-height: 18px;
+				width: 20px;
+				border-radius: 50%;
+				text-align: center;
+				font-size: 12px;
+				margin-left: 10px;
+				cursor: pointer;
+				border: 1px solid $red-color;
+				transition: $transition;
+				&:hover {
+					background-color: $red-color;
+					color: $font-white;
+				}
+			}
+		}
+	}
+	.submit {
+		border-top: 1px dashed $lightgray;
+		padding-top: 20px;
+		text-align: center;
+	}
+}
+
+.corner-modal {
+	display: none;
+	position: fixed;
+	background-color: gray;
+	top: 10px;
+	right: 10px;
+	z-index: 5;
+	font-size: 11px;
+	background-color: rgba(83, 162, 83, 0.8);
+	color: $font-white;
+	border-radius: 5px;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+	padding: 15px;
+	max-width: 250px;
+	.fa {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		cursor: pointer;
+	}
+}
+
+#select-animal {
+	padding-bottom: 50px;
+	border-bottom: 1px dashed $border;
+	margin-bottom: 50px;
+	.drop-toggle {
+		border-bottom: 2px solid $green-color !important;
+	}
+	.drop-item a {
+		color: $font-dark;
+		text-decoration: none;
+		display: block;
+		width: 100%;
 	}
 }

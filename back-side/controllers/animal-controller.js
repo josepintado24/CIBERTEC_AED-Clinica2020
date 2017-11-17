@@ -36,29 +36,31 @@ function saveAnimal(req, res){
 		animal.user = req.user.sub;
 
 		animal.save((err, animalStored) => {
-			if(err)
-				status500(res, 'Error en el servidor');
+			if(err) res.status(500).send({message: 'Error en el servidor.'});
 			else {
 				if(!animalStored)
-					status404(res,  'Error al guardar el animal');
+					res.status(404).send({message: 'Error al guardar el animal.'})
 				else
-					status200(res, animalStored);
+					res.status(200).send({
+						animal: animalStored,
+						message: 'El animal ha sido guardado exitosamente en base de datos.'
+					});
 			}
 		});
 	}
 	else
-		status200(res, 'El nombre del animal es obligatorio');
+		res.status(200).send({message: 'El nombre del animal es obligatorio.'});
 }
 
 function getAnimals(req, res){
 	Animal.find({}).populate({path: 'user'}).exec((err, animals) => {
-		if(err)
-			status500(res, 'Error en la petición');
+		if(err) res.status(500).send({message: 'Error en el servidor.'});
 		else {
-			if(!animals)
-				status404(res, 'No hay animales');
-			else
-				status200(res, animals);
+			if(!animals) res.status(404).send({message: 'No se encontraron animales.'});
+			else res.status(200).send({
+				animals: animals,
+				message: 'Animales listados correctamente.'
+			})
 		}
 	});
 }
@@ -66,13 +68,13 @@ function getAnimals(req, res){
 function getAnimal(req, res){
 	var animalId = req.params.id;
 	Animal.findById(animalId).populate({path: 'user'}).exec((err, animal) => {
-		if(err)
-			status500(res, 'Error en la petición');
+		if(err) res.status(500).send({message: 'Error en el servidor.'});
 		else {
-			if(!animal)
-				status404(res, 'No se encontró el animal');
-			else
-				status200(res, animal);
+			if(!animal) res.status(404).send({message: 'No se encontro el animal.'})
+			else res.status(200).send({
+				animal: animal,
+				message: 'Animal obtenido correctamente.'
+			});
 		}
 	});
 }
@@ -105,17 +107,17 @@ function uploadImage(req, res){
 		var typeFile = typeSplit[1];
 
 		if(typeFile == 'png' || typeFile == 'jpg' || typeFile == 'jpeg' || typeFile == 'gif'){
-			// if(animalId != req.user.sub)
-			// 	status500(res, 'No tienes permiso para actualizar el usuario');
+			if(animalId != req.user.sub)
+				status500(res, 'No tienes permiso para actualizar el usuario');
 
 			Animal.findByIdAndUpdate(animalId, {image: fileName}, {new: true}, (err, animalUpdated) => {
-				if(err)
-					status500(res, 'Error al actualizar el animal');
+				if(err) res.status(500).send({message: 'Error al actualizar el animal.'});
 				else {
-					if(!animalUpdated)
-						status404(res, 'Animal no encontrado')
-					else
-						status200(res, animalUpdated);
+					if(!animalUpdated) res.status(404).send({message: 'Animal no encontrado.'});
+					else res.status(200).send({
+						animal: animalUpdated,
+						message: 'Imagen del animal guardada correctamente.'
+					});
 				}
 			});
 		}

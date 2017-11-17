@@ -16,6 +16,7 @@ function register(req, res){
 		user.email = params.email;
 		user.role = 'ROLE_USER';
 		user.image = null;
+		user.gender = params.gender;
 		
 		User.findOne({email: user.email.toLowerCase()}, (err, issetUser) => {
 			if(err) {
@@ -40,14 +41,17 @@ function register(req, res){
 										message: 'No se ha registrado el usuario'
 									});
 								else 
-									res.status(200).send({user: userStored});
+									res.status(200).send({
+										user: userStored,
+										message: 'Usuario registrado correctamente. Inicie sesión para comenzar a compartir con nosotros.'
+									});
 							}
 						});
 					});
 				}
 				else {
 					res.status(200).send({
-						message: 'El usuario ya existe'
+						message: 'El usuario ya se encuentra registrado.'
 					});
 				}
 			}
@@ -76,11 +80,11 @@ function login(req, res){
 						else
 							res.status(200).send({user: user});
 					else
-						res.status(404).send({message: 'La contraseña es incorrecta'});
+						res.status(404).send({message: 'La contraseña es incorrecta. Por favor intente nuevamente.'});
 				});
 			}
 			else {
-				res.status(400).send({message: 'El usuario no existe'});
+				res.status(404).send({message: 'Lo sentimos, el usuario no existe.'});
 			}
 		}
 	});
@@ -89,18 +93,22 @@ function login(req, res){
 function updateUser(req, res){
 	var userId = req.params.id;
 	var update = req.body;
+	//delete update.password; -- Evitar que el objeto password se actualice
 
 	if(userId != req.user.sub)
 		return res.status(500).send({message: 'No tienes permiso para actualizar el usuario'});
 
 	User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated) => {
 		if(err)
-			res.status(500).send({message: 'Error al actualizar usuario'});
+			res.status(500).send({message: 'Error al actualizar usuario.'});
 		else {
 			if(!userUpdated)
 				res.status(404).send({message: 'Usuario no encontrado'});
 			else
-				res.status(200).send({user: userUpdated});
+				res.status(200).send({
+					user: userUpdated,
+					message: 'Usuario actualizado correctamente.'
+				});
 		}
 	});
 }

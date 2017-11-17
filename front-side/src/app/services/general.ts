@@ -6,9 +6,22 @@ export class General {
 	public xModal: string;
 	public identity;
 	public token;
+	public url: string;
 
 	constructor(){
 		this.xModal = '.modal .modal-close';
+		this.url = window.location.href;
+	}
+
+	prevent(ev){ ev.preventDefault(); }
+
+	showAlertModal(){ $('#cancelUserUpdate').addClass('back-modal-active'); }
+	closeAlertModal(){ $('#cancelUserUpdate').removeClass('back-modal-active'); }
+	closeCornerModal() { $('#statusAdmin').fadeOut(); }
+
+	headerWeb(){
+		var localUrl = this.url.split("/");
+		if(localUrl[3] == 'admin') $('#header-web').hide();
 	}
 
 	closeModal(){
@@ -37,7 +50,6 @@ export class General {
 	}
 
 	focusInput(inputs){
-		// var inputs = $('.user-modal input[type="text"], .user-modal input[type="password"]');
 		$.each(inputs, (index) => {
 			$(inputs[index]).click((ev) => {
 				var target = ev.target;
@@ -48,5 +60,18 @@ export class General {
 				.after('<span class="ipt-error fa fa-times"></span>');
 		});
 		inputs.focusout(() => $('.lblText').animate({opacity: 0}, 'fast'));
+	}
+
+	dropToggle(ev){
+		var target = ev.target;
+		$(target).closest('.dropdown').find('.drop-list').slideToggle('fast');
+	}
+
+	getLetter(){
+		if(this.getIdentity()){
+			var firstLetter = this.getIdentity().name.charAt(0).toLowerCase();
+			var lastLetter = this.getIdentity().surname.charAt(0).toLowerCase();
+			return firstLetter + lastLetter;
+		}
 	}
 }
