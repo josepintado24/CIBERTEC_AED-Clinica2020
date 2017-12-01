@@ -6,7 +6,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -31,10 +30,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
 
 import constantes.Constantes;
 import controllers.MantenimientoPacientesController;
@@ -554,14 +549,6 @@ public class MantenimientoPacientes extends JFrame {
 		
 		txtIngresar = new JTextField();
 		txtIngresar.addKeyListener(new KeyAdapter() {
-			public void mostrarDatos(Paciente data){
-				txtCodigo.setText(data.getCodPaciente());
-				txtNombres.setText(data.getNombres());
-				txtApellidos.setText(data.getApellidos());
-				txtDni.setText("" + data.getDni());
-				txtTelefono.setText("" + data.getTelefono());
-				resetearBusqueda();
-			}
 			@Override
 			public void keyTyped(KeyEvent arg0){
 				int cboSelect = getCboBuscarPor();
@@ -590,18 +577,7 @@ public class MantenimientoPacientes extends JFrame {
 				else {
 					String term = getBusquedaCodigo();
 					if(cboSelect == 1){
-						if(term.matches("PAC\\d{3}")){
-							Paciente buscarPaciente = paciente.buscarPorCodigo(term);
-							if(buscarPaciente != null){
-								mostrarDatos(buscarPaciente);
-							}
-							else {
-								mensaje("No hay registros de pacientes con este cÛdigo.");
-							}
-						}
-						else {
-							mensaje("El cÛdigo no ha sido ingresado en un formato correcto.\nEjemplo: \"PAC001\"");
-						}
+						return;
 					}
 					if(cboSelect == 2){
 						if(term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄\\s+]{0,25}") || term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄+]{0,25}")){
@@ -766,6 +742,14 @@ public class MantenimientoPacientes extends JFrame {
 		contentPane.add(txtNombres);
 		
 		txtDni = new JTextField();
+		txtDni.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(txtDni.getText().length() == 8){
+					arg0.consume();
+				}
+			}
+		});
 		txtDni.setEditable(false);
 		txtDni.setOpaque(false);
 		txtDni.setForeground(new Color(68, 68, 68));
@@ -786,6 +770,14 @@ public class MantenimientoPacientes extends JFrame {
 		contentPane.add(txtCodigo);
 		
 		txtTelefono = new JTextField();
+		txtTelefono.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(txtTelefono.getText().length() == 9){
+					arg0.consume();
+				}
+			}
+		});
 		txtTelefono.setEditable(false);
 		txtTelefono.setOpaque(false);
 		txtTelefono.setForeground(new Color(68, 68, 68));

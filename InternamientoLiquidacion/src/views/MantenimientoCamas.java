@@ -31,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import constantes.Constantes;
 import controllers.MantenimientoCamasController;
 import models.Cama;
+import java.awt.Font;
 
 public class MantenimientoCamas extends JFrame {
 
@@ -88,6 +89,11 @@ public class MantenimientoCamas extends JFrame {
 	private JLabel btnLibre;
 	private JLabel btnOcupado;
 	private JLabel label;
+	private JLabel arrBuscarEstado;
+	private JPanel cboBuscarEstado;
+	private JLabel btnSelectBuscarEstado;
+	private JLabel btnBuscarOcupado;
+	private JLabel btnBuscarLibre;
 
 	/**
 	 * Launch the application.
@@ -145,10 +151,93 @@ public class MantenimientoCamas extends JFrame {
 		});
 		
 		cboBuscarPor = new JPanel();
+		cboBuscarPor.setBorder(new EmptyBorder(0, 0, 0, 0));
 		cboBuscarPor.setVisible(false);
 		
 		cboEstado = new JPanel();
 		cboEstado.setVisible(false);
+		
+		cboBuscarEstado = new JPanel();
+		cboBuscarEstado.setVisible(false);
+		cboBuscarEstado.setBorder(new EmptyBorder(0, 0, 0, 0));
+		cboBuscarEstado.setBounds(657, 249, 264, 116);
+		contentPane.add(cboBuscarEstado);
+		cboBuscarEstado.setLayout(null);
+		
+		btnSelectBuscarEstado = new JLabel("Seleccionar --");
+		btnSelectBuscarEstado.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent evt) {
+				btnSelectBuscarEstado.setBackground(Constantes.hoverFont);
+			}
+			@Override
+			public void mouseExited(MouseEvent evt) {
+				btnSelectBuscarEstado.setBackground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				txtIngresar.setText(btnSelectBuscarEstado.getText());
+				cboBuscarEstado.setVisible(false);
+			}
+		});
+		btnSelectBuscarEstado.setCursor(Constantes.pointer);
+		btnSelectBuscarEstado.setOpaque(true);
+		btnSelectBuscarEstado.setForeground(Constantes.textgray);
+		btnSelectBuscarEstado.setFont(Constantes.regularFont);
+		btnSelectBuscarEstado.setBorder(new EmptyBorder(0, 10, 0, 10));
+		btnSelectBuscarEstado.setBackground(Color.WHITE);
+		btnSelectBuscarEstado.setBounds(0, 11, 264, 30);
+		cboBuscarEstado.add(btnSelectBuscarEstado);
+		
+		btnBuscarOcupado = new JLabel("Ocupado");
+		btnBuscarOcupado.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent evt) {
+				btnBuscarOcupado.setBackground(Constantes.hoverFont);
+			}
+			@Override
+			public void mouseExited(MouseEvent evt) {
+				btnBuscarOcupado.setBackground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				txtIngresar.setText(btnBuscarOcupado.getText());
+				cboBuscarEstado.setVisible(false);
+			}
+		});
+		btnBuscarOcupado.setCursor(Constantes.pointer);
+		btnBuscarOcupado.setOpaque(true);
+		btnBuscarOcupado.setForeground(Constantes.textgray);
+		btnBuscarOcupado.setFont(Constantes.regularFont);
+		btnBuscarOcupado.setBorder(new EmptyBorder(0, 10, 0, 10));
+		btnBuscarOcupado.setBackground(Color.WHITE);
+		btnBuscarOcupado.setBounds(0, 42, 264, 30);
+		cboBuscarEstado.add(btnBuscarOcupado);
+		
+		btnBuscarLibre = new JLabel("Libre");
+		btnBuscarLibre.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent evt) {
+				btnBuscarLibre.setBackground(Constantes.hoverFont);
+			}
+			@Override
+			public void mouseExited(MouseEvent evt) {
+				btnBuscarLibre.setBackground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				txtIngresar.setText(btnBuscarLibre.getText());
+				cboBuscarEstado.setVisible(false);
+			}
+		});
+		btnBuscarLibre.setCursor(Constantes.pointer);
+		btnBuscarLibre.setOpaque(true);
+		btnBuscarLibre.setForeground(Constantes.textgray);
+		btnBuscarLibre.setFont(Constantes.regularFont);
+		btnBuscarLibre.setBorder(new EmptyBorder(0, 10, 0, 10));
+		btnBuscarLibre.setBackground(Color.WHITE);
+		btnBuscarLibre.setBounds(0, 73, 264, 30);
+		cboBuscarEstado.add(btnBuscarLibre);
 		cboEstado.setBounds(127, 369, 349, 150);
 		contentPane.add(cboEstado);
 		cboEstado.setLayout(null);
@@ -170,7 +259,7 @@ public class MantenimientoCamas extends JFrame {
 				cboEstado.setVisible(false);
 			}
 		});
-		btnSeleccionarEstado.setForeground(new Color(68, 68, 68));
+		btnSeleccionarEstado.setForeground(Constantes.textgray);
 		btnSeleccionarEstado.setBackground(Color.WHITE);
 		btnSeleccionarEstado.setCursor(Constantes.pointer);
 		btnSeleccionarEstado.setFont(Constantes.regularFont);
@@ -196,7 +285,7 @@ public class MantenimientoCamas extends JFrame {
 				cboEstado.setVisible(false);
 			}
 		});
-		btnLibre.setForeground(new Color(68, 68, 68));
+		btnLibre.setForeground(Constantes.textgray);
 		btnLibre.setCursor(Constantes.pointer);
 		btnLibre.setFont(Constantes.regularFont);
 		btnLibre.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -221,7 +310,7 @@ public class MantenimientoCamas extends JFrame {
 				cboEstado.setVisible(false);
 			}
 		});
-		btnOcupado.setForeground(new Color(68, 68, 68));
+		btnOcupado.setForeground(Constantes.textgray);
 		btnOcupado.setCursor(Constantes.pointer);
 		btnOcupado.setFont(Constantes.regularFont);
 		btnOcupado.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -268,7 +357,7 @@ public class MantenimientoCamas extends JFrame {
 		btnCodigo.setBounds(1, 41, 198, 30);
 		btnCodigo.setOpaque(true);
 		cboBuscarPor.add(btnCodigo);
-		btnCodigo.setForeground(new Color(68, 68, 68));
+		btnCodigo.setForeground(Constantes.textgray);
 		btnCodigo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -305,12 +394,17 @@ public class MantenimientoCamas extends JFrame {
 				txtBuscar.setText(btnEstado.getText());
 				cboBuscarPor.setVisible(false);
 				getCboBuscarPor();
+				arrBuscarEstado.setVisible(true);
+				txtIngresar.setCursor(Constantes.pointer);
+				txtIngresar.setEditable(false);
+				txtIngresar.requestFocus(false);
+				txtIngresar.setText("Seleccionar --");
 			}
 		});
 		btnEstado.setOpaque(true);
 		btnEstado.setBounds(1, 72, 198, 30);
 		cboBuscarPor.add(btnEstado);
-		btnEstado.setForeground(new Color(68, 68, 68));
+		btnEstado.setForeground(Constantes.textgray);
 		btnEstado.setFont(Constantes.regularFont);
 		btnEstado.setBorder(new EmptyBorder(0, 10, 0, 10));
 		
@@ -576,16 +670,34 @@ public class MantenimientoCamas extends JFrame {
 		btnEliminar.setCursor(Constantes.pointer);
 		contentPane.add(btnEliminar);
 		
+		arrBuscarEstado = new JLabel("");
+		arrBuscarEstado.setVisible(false);
+		arrBuscarEstado.setIcon(new ImageIcon(MantenimientoCamas.class.getResource("/views/images/ico-down.png")));
+		arrBuscarEstado.setBounds(904, 222, 10, 14);
+		contentPane.add(arrBuscarEstado);
+		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(MantenimientoCamas.class.getResource("/views/images/ico-down.png")));
 		label.setBounds(455, 343, 10, 14);
 		contentPane.add(label);
 		
 		txtIngresar = new JTextField();
+		txtIngresar.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent evt){
+				if(!txtIngresar.isEditable()){
+					boolean status = (cboBuscarEstado.isVisible()) ? false : true;
+					cboBuscarEstado.setVisible(status);
+				}
+				else {
+					return;
+				}
+			}
+		});
 		txtIngresar.setEnabled(false);
 		txtIngresar.setEditable(false);
 		txtIngresar.setOpaque(false);
-		txtIngresar.setForeground(new Color(68, 68, 68));
+		txtIngresar.setForeground(Constantes.textgray);
 		txtIngresar.setFont(Constantes.regularFont);
 		txtIngresar.setColumns(10);
 		txtIngresar.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -595,7 +707,7 @@ public class MantenimientoCamas extends JFrame {
 		txtPrecio = new JTextField();
 		txtPrecio.setEditable(false);
 		txtPrecio.setOpaque(false);
-		txtPrecio.setForeground(new Color(68, 68, 68));
+		txtPrecio.setForeground(Constantes.textgray);
 		txtPrecio.setFont(Constantes.regularFont);
 		txtPrecio.setColumns(10);
 		txtPrecio.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -605,7 +717,7 @@ public class MantenimientoCamas extends JFrame {
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
 		txtCodigo.setOpaque(false);
-		txtCodigo.setForeground(new Color(68, 68, 68));
+		txtCodigo.setForeground(Constantes.textgray);
 		txtCodigo.setFont(Constantes.regularFont);
 		txtCodigo.setColumns(10);
 		txtCodigo.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -634,7 +746,7 @@ public class MantenimientoCamas extends JFrame {
 		txtEstado.setOpaque(false);
 		txtEstado.setEnabled(false);
 		txtEstado.setDisabledTextColor(Constantes.textgray);
-		txtEstado.setForeground(new Color(68, 68, 68));
+		txtEstado.setForeground(Constantes.textgray);
 		txtEstado.setFont(Constantes.regularFont);
 		txtEstado.setColumns(10);
 		txtEstado.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -710,7 +822,7 @@ public class MantenimientoCamas extends JFrame {
 		contentPane.add(lblInputIngresar);
 		
 		lblIngresar = new JLabel("Ingrese dato seg\u00FAn su selecci\u00F3n:");
-		lblIngresar.setForeground(new Color(68, 68, 68));
+		lblIngresar.setForeground(Constantes.textgray);
 		lblIngresar.setFont(Constantes.regularFont);
 		lblIngresar.setBounds(428, 212, 217, 35);
 		contentPane.add(lblIngresar);
@@ -798,7 +910,7 @@ public class MantenimientoCamas extends JFrame {
 		contentPane.add(lblAviso);
 		
 		lblCodigo = new JLabel("C\u00F3digo:");
-		lblCodigo.setForeground(new Color(68, 68, 68));
+		lblCodigo.setForeground(Constantes.textgray);
 		lblCodigo.setFont(Constantes.regularFont);
 		lblCodigo.setBounds(25, 286, 87, 35);
 		contentPane.add(lblCodigo);
@@ -810,7 +922,7 @@ public class MantenimientoCamas extends JFrame {
 		contentPane.add(lblInputCodigo);
 		
 		lblPrecio = new JLabel("Precio:");
-		lblPrecio.setForeground(new Color(68, 68, 68));
+		lblPrecio.setForeground(Constantes.textgray);
 		lblPrecio.setFont(Constantes.regularFont);
 		lblPrecio.setBounds(580, 286, 87, 35);
 		contentPane.add(lblPrecio);
@@ -822,7 +934,7 @@ public class MantenimientoCamas extends JFrame {
 		contentPane.add(lblInputPrecio);
 		
 		lblEstado = new JLabel("Estado:");
-		lblEstado.setForeground(new Color(68, 68, 68));
+		lblEstado.setForeground(Constantes.textgray);
 		lblEstado.setFont(Constantes.regularFont);
 		lblEstado.setBounds(25, 332, 87, 35);
 		contentPane.add(lblEstado);
@@ -842,7 +954,18 @@ public class MantenimientoCamas extends JFrame {
 		scrollPane.setViewportView(tblTabla);
 		
 		table = new JTable();
-		table.setEnabled(false);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent ev) {
+				int rowIndex = table.getSelectedRow();
+				String code = table.getValueAt(rowIndex, 0).toString();
+				Cama getCama = cama.buscarPorCodigo(code);
+				txtCodigo.setText(getCama.getCodCama());
+				txtEstado.setText(getCama.getEstado());
+				txtPrecio.setText("" + getCama.getPrecioDia());
+			}
+		});
+		
 		table.setForeground(Constantes.textgray);
 		table.setFont(Constantes.regularFont);
 		table.setRowHeight(30);
@@ -1098,5 +1221,4 @@ public class MantenimientoCamas extends JFrame {
 		if(Integer.toString(lastCode).length() == 3) newCode += "" + lastCode;
 		txtCodigo.setText(newCode);
 	}
-	
 }
