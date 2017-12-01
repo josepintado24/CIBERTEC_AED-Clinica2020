@@ -1,0 +1,3 @@
+EMP001#Gabriel#Sánchez Villacorta#73992854#995828572#Médico#usergabriel#gabriel123456
+EMP002#Belen#Roque Vasquez#973293657#72339545#Enfermera(o)#userbelen#belen123456
+EMP003#User#Auto#78945612#987654321#Enfermera(o)#userauto#auto123456
