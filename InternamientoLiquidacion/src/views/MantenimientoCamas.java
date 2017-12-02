@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -32,6 +33,8 @@ import constantes.Constantes;
 import controllers.MantenimientoCamasController;
 import models.Cama;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MantenimientoCamas extends JFrame {
 
@@ -94,6 +97,7 @@ public class MantenimientoCamas extends JFrame {
 	private JLabel btnSelectBuscarEstado;
 	private JLabel btnBuscarOcupado;
 	private JLabel btnBuscarLibre;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -160,7 +164,7 @@ public class MantenimientoCamas extends JFrame {
 		cboBuscarEstado = new JPanel();
 		cboBuscarEstado.setVisible(false);
 		cboBuscarEstado.setBorder(new EmptyBorder(0, 0, 0, 0));
-		cboBuscarEstado.setBounds(657, 249, 264, 116);
+		cboBuscarEstado.setBounds(655, 249, 266, 115);
 		contentPane.add(cboBuscarEstado);
 		cboBuscarEstado.setLayout(null);
 		
@@ -178,6 +182,7 @@ public class MantenimientoCamas extends JFrame {
 			public void mouseClicked(MouseEvent evt) {
 				txtIngresar.setText(btnSelectBuscarEstado.getText());
 				cboBuscarEstado.setVisible(false);
+				listarCamas();
 			}
 		});
 		btnSelectBuscarEstado.setCursor(Constantes.pointer);
@@ -186,7 +191,7 @@ public class MantenimientoCamas extends JFrame {
 		btnSelectBuscarEstado.setFont(Constantes.regularFont);
 		btnSelectBuscarEstado.setBorder(new EmptyBorder(0, 10, 0, 10));
 		btnSelectBuscarEstado.setBackground(Color.WHITE);
-		btnSelectBuscarEstado.setBounds(0, 11, 264, 30);
+		btnSelectBuscarEstado.setBounds(1, 11, 264, 30);
 		cboBuscarEstado.add(btnSelectBuscarEstado);
 		
 		btnBuscarOcupado = new JLabel("Ocupado");
@@ -203,6 +208,7 @@ public class MantenimientoCamas extends JFrame {
 			public void mouseClicked(MouseEvent evt) {
 				txtIngresar.setText(btnBuscarOcupado.getText());
 				cboBuscarEstado.setVisible(false);
+				listaPorEstado();
 			}
 		});
 		btnBuscarOcupado.setCursor(Constantes.pointer);
@@ -211,7 +217,7 @@ public class MantenimientoCamas extends JFrame {
 		btnBuscarOcupado.setFont(Constantes.regularFont);
 		btnBuscarOcupado.setBorder(new EmptyBorder(0, 10, 0, 10));
 		btnBuscarOcupado.setBackground(Color.WHITE);
-		btnBuscarOcupado.setBounds(0, 42, 264, 30);
+		btnBuscarOcupado.setBounds(1, 42, 264, 30);
 		cboBuscarEstado.add(btnBuscarOcupado);
 		
 		btnBuscarLibre = new JLabel("Libre");
@@ -228,6 +234,7 @@ public class MantenimientoCamas extends JFrame {
 			public void mouseClicked(MouseEvent evt) {
 				txtIngresar.setText(btnBuscarLibre.getText());
 				cboBuscarEstado.setVisible(false);
+				listaPorEstado();
 			}
 		});
 		btnBuscarLibre.setCursor(Constantes.pointer);
@@ -236,8 +243,13 @@ public class MantenimientoCamas extends JFrame {
 		btnBuscarLibre.setFont(Constantes.regularFont);
 		btnBuscarLibre.setBorder(new EmptyBorder(0, 10, 0, 10));
 		btnBuscarLibre.setBackground(Color.WHITE);
-		btnBuscarLibre.setBounds(0, 73, 264, 30);
+		btnBuscarLibre.setBounds(1, 73, 264, 30);
 		cboBuscarEstado.add(btnBuscarLibre);
+		
+		lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(MantenimientoCamas.class.getResource("/views/images/contenedor-combo-buscar-estado.png")));
+		lblNewLabel.setBounds(0, 0, 266, 115);
+		cboBuscarEstado.add(lblNewLabel);
 		cboEstado.setBounds(127, 369, 349, 150);
 		contentPane.add(cboEstado);
 		cboEstado.setLayout(null);
@@ -463,7 +475,6 @@ public class MantenimientoCamas extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				changeOptionActive("Listar");
-//				btnListar.setForeground(Constantes.skyblue);
 				txtBuscar.setEnabled(false);
 				lblInputBuscar.setEnabled(false);
 				lblInputIngresar.setEnabled(false);
@@ -481,6 +492,7 @@ public class MantenimientoCamas extends JFrame {
 				
 				txtCodigo.setText("");
 				hideButtons();
+				listarCamas();
 			}
 		});
 		
@@ -682,6 +694,17 @@ public class MantenimientoCamas extends JFrame {
 		contentPane.add(label);
 		
 		txtIngresar = new JTextField();
+		txtIngresar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent evt) {
+				int select = getCboBuscarPor();
+				if(select == 1){
+					if(txtIngresar.getText().length() == 6){
+						evt.consume();
+					}
+				}
+			}
+		});
 		txtIngresar.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent evt){
@@ -782,6 +805,10 @@ public class MantenimientoCamas extends JFrame {
 				if(cboBuscar == 1){
 					txtIngresar.setText("CAM");
 					txtIngresar.requestFocus();
+					arrBuscarEstado.setVisible(false);
+					txtIngresar.setCursor(Constantes.textCursor);
+					txtIngresar.setEditable(true);
+					txtIngresar.requestFocus(true);
 				}
 				else {
 					txtIngresar.setText("");
@@ -1013,7 +1040,7 @@ public class MantenimientoCamas extends JFrame {
 						cama.agregarCamas();
 						
 						mensaje("Los nuevos registros han sido grabados correctamente.");
-						listarPacientes();
+						listarCamas();
 						resetFields();
 						autogenerateCode();
 					}
@@ -1065,7 +1092,7 @@ public class MantenimientoCamas extends JFrame {
 						
 						mensaje("Los registros de este paciente han sido actualizados correctamente.");
 						cama.agregarCamas();
-						listarPacientes();
+						listarCamas();
 						resetFields();
 					}
 				}
@@ -1107,7 +1134,7 @@ public class MantenimientoCamas extends JFrame {
 					if(option == 0){
 						cama.eliminarCama(dropCama);
 						cama.agregarCamas();
-						listarPacientes();
+						listarCamas();
 						resetFields();
 						mensaje("Los registros de este paciente han sido eliminados correctamente.");
 					}
@@ -1137,7 +1164,7 @@ public class MantenimientoCamas extends JFrame {
         setVisible(true);
         
 //        paciente.cargarPacientes();
-        listarPacientes();
+        listarCamas();
 	}
 	
 	private int getCboBuscarPor(){
@@ -1154,7 +1181,7 @@ public class MantenimientoCamas extends JFrame {
 		return Double.parseDouble(txtPrecio.getText());
 	}
 	
-	private void listarPacientes(){
+	private void listarCamas(){
 		tabla.setRowCount(0);
 		for(int i = 0; i < cama.tamanio(); i++){
 			Object[] data = {
@@ -1221,4 +1248,24 @@ public class MantenimientoCamas extends JFrame {
 		if(Integer.toString(lastCode).length() == 3) newCode += "" + lastCode;
 		txtCodigo.setText(newCode);
 	}
+	
+	private void listaPorEstado(){
+		String term = txtIngresar.getText();
+		ArrayList<Cama> lista = cama.listCamaEstado(term);
+		if(lista != null){
+			tabla.setRowCount(0);
+			for(int i = 0; i < lista.size(); i ++){
+				Object[] data = {
+					lista.get(i).getCodCama(),
+					lista.get(i).getPrecioDia(),
+					lista.get(i).getEstado()
+				};
+				tabla.addRow(data);
+			}
+		}
+		else {
+			mensaje("No hay registros de camas con estado:  " + term);
+		}
+	}
+	
 }

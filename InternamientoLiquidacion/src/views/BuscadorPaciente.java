@@ -24,8 +24,11 @@ import constantes.Constantes;
 import models.Paciente;
 import controllers.MantenimientoPacientesController;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class BuscadorPaciente extends JFrame {
 
@@ -45,7 +48,7 @@ public class BuscadorPaciente extends JFrame {
 	private JLabel lblIngresar;
 	private JLabel lblBuscar;
 	private JLabel btnBuscar;
-	private JTextField txtCodPaciente;
+	private JTextField txtPaciente;
 	private JLabel lblInputCodPaciente;
 	private JLabel lblCodPaciente;
 	private JLabel lblSeleccionar;
@@ -299,6 +302,88 @@ public class BuscadorPaciente extends JFrame {
 		contentPane.add(lblBuscarPor);
 		
 		txtIngresar = new JTextField();
+		txtIngresar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0){
+				int cboSelect = cboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un tÈrmino de b˙squeda.");
+				}
+				else {
+					if(cboSelect == 1){
+						if(txtIngresar.getText().length() == 6){
+							arg0.consume();
+						}
+					}
+					if(cboSelect == 3){
+						if(txtIngresar.getText().length() == 8){
+							arg0.consume();
+						}
+					}
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				int cboSelect = cboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un tÈrmino de b˙squeda.");
+				}
+				else {
+					String term = getBusquedaCodigo();
+					if(cboSelect == 1){
+						return;
+					}
+					if(cboSelect == 2){
+						if(term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄\\s+]{0,25}") || term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄+]{0,25}")){
+							ArrayList<Paciente> buscarPaciente = paciente.listPacientesApellidos(term);
+							if(buscarPaciente != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarPaciente.size(); i++){
+									Object[] data = {
+										buscarPaciente.get(i).getCodPaciente(),
+										buscarPaciente.get(i).getApellidos(),
+										buscarPaciente.get(i).getNombres(),
+										buscarPaciente.get(i).getTelefono(),
+										buscarPaciente.get(i).getDni()
+									};
+									tabla.addRow(data);
+								}
+							}
+							else {
+								mensaje("No hay registros de pacientes con este apellido.");
+							}
+						}
+						else {
+							mensaje("El apellido no ha sido ingresado en un formato correcto.\nIngrese sÛlo letras.");
+						}
+					}
+					if(cboSelect == 3){
+						if(term.matches("[0-9]+") || arg0.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+							ArrayList<Paciente> buscarPaciente = paciente.listPacientesDni(term);
+							if(buscarPaciente != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarPaciente.size(); i++){
+									Object[] data = {
+										buscarPaciente.get(i).getCodPaciente(),
+										buscarPaciente.get(i).getApellidos(),
+										buscarPaciente.get(i).getNombres(),
+										buscarPaciente.get(i).getTelefono(),
+										buscarPaciente.get(i).getDni()
+									};
+									tabla.addRow(data);
+								}
+							}
+							else {
+								mensaje("No hay registros de pacientes con este DNI.");
+							}
+						}
+						else {
+							mensaje("El DNI no ha sido ingresado en un formato correcto.\nEjemplo: \"45216973\"");
+						}
+					}
+				}
+			}
+		});
 		txtIngresar.setOpaque(false);
 		txtIngresar.setForeground(new Color(68, 68, 68));
 		txtIngresar.setFont(Constantes.regularFont);
@@ -337,7 +422,7 @@ public class BuscadorPaciente extends JFrame {
 				btnBuscar.setIcon(new ImageIcon(BuscadorPaciente.class.getResource("/views/images/btn-login.png")));
 			}
 			void mostrarDatos(Paciente data){
-				txtCodPaciente.setText(data.getCodPaciente());
+				txtPaciente.setText(data.getNombres() + " " + data.getApellidos());
 			}
 			public void mouseClicked(MouseEvent e) {
 				if(btnBuscar.isEnabled()){
@@ -400,21 +485,21 @@ public class BuscadorPaciente extends JFrame {
 		btnBuscar.setBounds(526, 161, 100, 35);
 		contentPane.add(btnBuscar);
 		
-		txtCodPaciente = new JTextField();
-		txtCodPaciente.setOpaque(false);
-		txtCodPaciente.setForeground(new Color(68, 68, 68));
-		txtCodPaciente.setFont(Constantes.regularFont);
-		txtCodPaciente.setColumns(10);
-		txtCodPaciente.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtCodPaciente.setBounds(260, 207, 251, 35);
-		contentPane.add(txtCodPaciente);
+		txtPaciente = new JTextField();
+		txtPaciente.setOpaque(false);
+		txtPaciente.setForeground(new Color(68, 68, 68));
+		txtPaciente.setFont(Constantes.regularFont);
+		txtPaciente.setColumns(10);
+		txtPaciente.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtPaciente.setBounds(260, 207, 251, 35);
+		contentPane.add(txtPaciente);
 		
 		lblInputCodPaciente = new JLabel("");
 		lblInputCodPaciente.setIcon(new ImageIcon(BuscadorPaciente.class.getResource("/views/images/text-ingresar.png")));
 		lblInputCodPaciente.setBounds(252, 207, 266, 35);
 		contentPane.add(lblInputCodPaciente);
 		
-		lblCodPaciente = new JLabel("C\u00F3digo de paciente seleccionado:");
+		lblCodPaciente = new JLabel("Paciente seleccionado:");
 		lblCodPaciente.setForeground(new Color(68, 68, 68));
 		lblCodPaciente.setFont(Constantes.regularFont);
 		lblCodPaciente.setBounds(25, 207, 217, 35);
@@ -440,7 +525,7 @@ public class BuscadorPaciente extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if(!txtCodPaciente.getText().contentEquals("")){
+				if(!txtPaciente.getText().contentEquals("")){
 					sendCodPaciente();
 					dispose();
 				}
@@ -467,9 +552,10 @@ public class BuscadorPaciente extends JFrame {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Paciente getPaciente = paciente.obtener(table.getSelectedRow());
-				txtCodPaciente.setText(getPaciente.getCodPaciente());
-				txtNombre.setText(getPaciente.getNombres());
+				int rowIndex = table.getSelectedRow();
+				String code = table.getValueAt(rowIndex, 0).toString();
+				Paciente getPaciente = paciente.buscarPorCodigo(code);
+				txtPaciente.setText(getPaciente.getNombres() + " " + getPaciente.getApellidos());
 			}
 		});
 		table.setFillsViewportHeight(true);
@@ -477,8 +563,8 @@ public class BuscadorPaciente extends JFrame {
 		
 		tabla = new DefaultTableModel();
 		tabla.addColumn("CÛdigo");
-		tabla.addColumn("Nombre");
 		tabla.addColumn("Apellidos");
+		tabla.addColumn("Nombre");
 		tabla.addColumn("DNI");
 		tabla.addColumn("TelÈfono");
 		table.setModel(tabla);
@@ -548,7 +634,7 @@ public class BuscadorPaciente extends JFrame {
 	}
 	
 	public String sendCodPaciente(){
-		return txtCodPaciente.getText();
+		return txtPaciente.getText();
 	}
 	
 	public String sendNombrePaciente(){

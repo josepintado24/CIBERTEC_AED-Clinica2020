@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -36,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
 import constantes.Constantes;
 import controllers.InternamientoPacientesController;
 import models.Internamiento;
+import models.Paciente;
+import javax.swing.JTextArea;
 
 public class InternamientoPacientes extends JFrame {
 
@@ -51,37 +54,16 @@ public class InternamientoPacientes extends JFrame {
 	private JSeparator separator;
 	private JSeparator separatorMenu;
 	private JLabel lblTitulo;
-	private JLabel btnListar;
 	private JLabel btnIngresar;
-	private JLabel btnConsultar;
-	private JLabel btnEliminar;
-	private JLabel lblInputBuscar;
-	private JLabel lblBuscarPor;
-	private JLabel lblInputIngresar;
-	private JLabel lblIngresar;
-	private JLabel btnBuscar;
-	private JLabel lblBuscar;
 	private JLabel lblAviso;
 	private JLabel lblCodInternamiento;
 	private JLabel lblCodPaciente;
 	private JLabel lblNombre;
 	private JLabel lblInputNombre;
 	private JLabel lblFechaIngreso;
-	private JTextField txtBuscar;
-	private JTextField txtIngresar;
-	private JTable table;
-	private JScrollPane tblTabla;
 	private DefaultTableModel tabla;
-	private JScrollPane scrollPane;
-	private JLabel arrowBuscarPor;
-	private JLabel cboBackground;
-	private JLabel btnSeleccionar;
-	private JLabel btnCodigoInt;
-	private JLabel btnCodPaciente;
 	private JLabel lblCodCama;
 	private JLabel lblInputCodCama;
-	private JLabel btnCodigoCama;
-	private JPanel cboBuscarPor;
 	private JLabel btnIngresarConfirm;
 	private JLabel btnEliminarConfirm;
 	private JLabel lblIngresarConfirm;
@@ -111,6 +93,9 @@ public class InternamientoPacientes extends JFrame {
 	private JLabel lblEstado;
 	private JLabel lblInputSeleccionarEstado;
 	private Date date;
+	private JTextArea txtInfo;
+	private JScrollPane scrollPane;
+	private JLabel lblInfo;
 
 	/**
 	 * Launch the application.
@@ -169,142 +154,20 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		
-		cboBuscarPor = new JPanel();
-		cboBuscarPor.setVisible(false);
-		cboBuscarPor.setBounds(127, 249, 200, 150);
-		contentPane.add(cboBuscarPor);
-		cboBuscarPor.setLayout(null);
-		
-		btnSeleccionar = new JLabel("Seleccionar --");
-		btnSeleccionar.setOpaque(true);
-		btnSeleccionar.setBackground(Color.WHITE);
-		btnSeleccionar.setCursor(Constantes.pointer);
-		btnSeleccionar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnSeleccionar.setBackground(Constantes.hoverFont);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnSeleccionar.setBackground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtBuscar.setText(btnSeleccionar.getText());
-				getCboBuscarPor();
-				cboBuscarPor.setVisible(false);
-			}
-		});
-		btnSeleccionar.setBounds(1, 11, 198, 30);
-		cboBuscarPor.add(btnSeleccionar);
-		btnSeleccionar.setFont(Constantes.regularFont);
-		btnSeleccionar.setForeground(Constantes.textgray);
-		btnSeleccionar.setBorder(new EmptyBorder(0, 10, 0, 10));
-		
-		btnCodigoInt = new JLabel("C\u00F3digo de internamiento");
-		btnCodigoInt.setBackground(Color.WHITE);
-		btnCodigoInt.setCursor(Constantes.pointer);
-		btnCodigoInt.setBounds(1, 41, 198, 30);
-		btnCodigoInt.setOpaque(true);
-		cboBuscarPor.add(btnCodigoInt);
-		btnCodigoInt.setForeground(new Color(68, 68, 68));
-		btnCodigoInt.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnCodigoInt.setBackground(Constantes.hoverFont);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnCodigoInt.setBackground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtBuscar.setText(btnCodigoInt.getText());
-				cboBuscarPor.setVisible(false);
-				txtIngresar.setText("INT");
-				txtIngresar.requestFocus();
-				getCboBuscarPor();
-			}
-		});
-		btnCodigoInt.setFont(Constantes.regularFont);
-		btnCodigoInt.setBorder(new EmptyBorder(0, 10, 0, 10));
-		
-		btnCodPaciente = new JLabel("C\u00F3digo de paciente");
-		btnCodPaciente.setBackground(Color.WHITE);
-		btnCodPaciente.setCursor(Constantes.pointer);
-		btnCodPaciente.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnCodPaciente.setBackground(Constantes.hoverFont);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnCodPaciente.setBackground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtBuscar.setText(btnCodPaciente.getText());
-				cboBuscarPor.setVisible(false);
-				txtIngresar.setText("PAC");
-				txtIngresar.requestFocus();
-				getCboBuscarPor();
-			}
-		});
-		btnCodPaciente.setOpaque(true);
-		btnCodPaciente.setBounds(1, 72, 198, 30);
-		cboBuscarPor.add(btnCodPaciente);
-		btnCodPaciente.setForeground(new Color(68, 68, 68));
-		btnCodPaciente.setFont(Constantes.regularFont);
-		btnCodPaciente.setBorder(new EmptyBorder(0, 10, 0, 10));
-		
-		btnCodigoCama = new JLabel("C\u00F3digo de cama");
-		btnCodigoCama.setBackground(Color.WHITE);
-		btnCodigoCama.setOpaque(true);
-		btnCodigoCama.setBounds(1, 104, 198, 30);
-		cboBuscarPor.add(btnCodigoCama);
-		btnCodigoCama.setForeground(new Color(68, 68, 68));
-		btnCodigoCama.setCursor(Constantes.pointer);
-		btnCodigoCama.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnCodigoCama.setBackground(Constantes.hoverFont);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnCodigoCama.setBackground(Color.WHITE);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtBuscar.setText(btnCodigoCama.getText());
-				cboBuscarPor.setVisible(false);
-				txtIngresar.setText("CAM");
-				txtIngresar.requestFocus();
-				getCboBuscarPor();
-			}
-		});
-		btnCodigoCama.setFont(Constantes.regularFont);
-		btnCodigoCama.setBorder(new EmptyBorder(0, 10, 0, 10));
-		
-		cboBackground = new JLabel("");
-		cboBackground.setBorder(new EmptyBorder(0, 0, 0, 0));
-		cboBackground.setBounds(0, 0, 200, 150);
-		cboBuscarPor.add(cboBackground);
-		cboBackground.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/contenedor-combo.png")));
-		
 		txtCodInternamiento = new JTextField();
 		txtCodInternamiento.setOpaque(false);
 		txtCodInternamiento.setForeground(new Color(68, 68, 68));
-		txtCodInternamiento.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtCodInternamiento.setFont(Constantes.regularFont);
 		txtCodInternamiento.setEditable(false);
 		txtCodInternamiento.setColumns(10);
 		txtCodInternamiento.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtCodInternamiento.setBounds(135, 286, 358, 35);
+		txtCodInternamiento.setBounds(135, 218, 358, 35);
 		contentPane.add(txtCodInternamiento);
 		
 		lblInputCodInternamiento = new JLabel("");
 		lblInputCodInternamiento.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-large.png")));
-		lblInputCodInternamiento.setEnabled(false);
-		lblInputCodInternamiento.setBounds(127, 286, 376, 35);
+		lblInputCodInternamiento.setEnabled(true);
+		lblInputCodInternamiento.setBounds(127, 218, 376, 35);
 		contentPane.add(lblInputCodInternamiento);
 		
 		lblTitulo = new JLabel("Internamiento de Pacientes");
@@ -343,59 +206,6 @@ public class InternamientoPacientes extends JFrame {
 		ImageIcon background = new ImageIcon(InternamientoPacientes.class.getResource("/views/images/background-mantenimiento.png"));
 		ImageIcon backfinal = new ImageIcon(background.getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT));
 		
-		btnListar = new JLabel("Listar");
-		btnListar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnListar.setForeground(Constantes.skyblue);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnListar.setForeground(Constantes.textgray);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				changeOptionActive("Listar");
-//				btnListar.setForeground(Constantes.skyblue);
-				txtBuscar.setEnabled(false);
-				lblInputBuscar.setEnabled(false);
-				lblInputIngresar.setEnabled(false);
-				txtIngresar.setEditable(false);
-				txtIngresar.setEnabled(false);
-				btnBuscar.setEnabled(false);
-				lblBuscar.setEnabled(false);
-				
-				lblInputCodInternamiento.setEnabled(false);
-				txtCodInternamiento.setEditable(false);
-				lblInputNombre.setEnabled(false);
-				txtNombre.setEditable(false);
-				lblInputCodPaciente.setEnabled(false);
-				txtCodPaciente.setEditable(false);
-				lblInputCodCama.setEnabled(false);
-				txtCodCama.setEditable(false);
-				lblSelectCodPaciente.setEnabled(false);
-				btnSelectCodPaciente.setEnabled(false);
-				lblSelectCodCama.setEnabled(false);
-				btnSelectCodCama.setEnabled(false);
-				
-				txtCodInternamiento.setText("");
-				hideButtons();
-			}
-		});
-		
-		arrowBuscarPor = new JLabel("");
-		arrowBuscarPor.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/ico-down.png")));
-		arrowBuscarPor.setCursor(Constantes.pointer);
-		arrowBuscarPor.setBounds(307, 222, 10, 14);
-		
-		contentPane.add(arrowBuscarPor);
-		btnListar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnListar.setFont(Constantes.regularFont);
-		btnListar.setForeground(Constantes.textgray);
-		btnListar.setCursor(Constantes.pointer);
-		btnListar.setBounds(121, 122, 64, 26);
-		contentPane.add(btnListar);
-		
 		btnIngresar = new JLabel("Ingresar");
 		btnIngresar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -410,318 +220,19 @@ public class InternamientoPacientes extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				changeOptionActive("Ingresar");
 				resetFields();
-				txtBuscar.setEnabled(false);
-				lblInputBuscar.setEnabled(false);
-				lblInputIngresar.setEnabled(false);
-				txtIngresar.setEditable(false);
-				txtIngresar.setEnabled(false);
-				btnBuscar.setEnabled(false);
-				lblBuscar.setEnabled(false);
-				
-				lblInputCodInternamiento.setEnabled(false);
-				txtCodInternamiento.setEditable(false);
-				lblInputNombre.setEnabled(true);
-				txtNombre.setEditable(true);
-				lblInputCodPaciente.setEnabled(true);
-				txtCodPaciente.setEditable(true);
-				lblInputCodCama.setEnabled(true);
-				txtCodCama.setEditable(true);
-				lblSelectCodPaciente.setEnabled(true);
-				btnSelectCodPaciente.setEnabled(true);
-				lblSelectCodCama.setEnabled(true);
-				btnSelectCodCama.setEnabled(true);
-				
 				autogenerateHoraEstado();
-				
 				hideButtons();
-				lblIngresarConfirm.setVisible(true);
-				btnIngresarConfirm.setVisible(true);
-				
 				autogenerateCode();
 			}
 		});
 		btnIngresar.setHorizontalAlignment(SwingConstants.CENTER);
 		btnIngresar.setFont(Constantes.regularFont);
 		btnIngresar.setForeground(Constantes.textgray);
-		btnIngresar.setBounds(360, 122, 64, 26);
+		btnIngresar.setBounds(496, 122, 64, 26);
 		btnIngresar.setCursor(Constantes.pointer);
 		contentPane.add(btnIngresar);
 		
-		btnConsultar = new JLabel("Consultar");
-		btnConsultar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnConsultar.setForeground(Constantes.skyblue);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnConsultar.setForeground(Constantes.textgray);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				changeOptionActive("Consultar");
-				txtBuscar.setEnabled(true);
-				lblInputBuscar.setEnabled(true);
-				lblInputIngresar.setEnabled(true);
-				txtIngresar.setEditable(true);
-				txtIngresar.setEnabled(true);
-				btnBuscar.setEnabled(true);
-				lblBuscar.setEnabled(true);
-				
-				lblInputCodInternamiento.setEnabled(false);
-				txtCodInternamiento.setEditable(false);
-				lblInputNombre.setEnabled(false);
-				txtNombre.setEditable(false);
-				lblInputCodPaciente.setEnabled(false);
-				txtCodPaciente.setEditable(false);
-				lblInputCodCama.setEnabled(false);
-				txtCodCama.setEditable(false);
-				lblSelectCodPaciente.setEnabled(false);
-				btnSelectCodPaciente.setEnabled(false);
-				lblSelectCodCama.setEnabled(false);
-				btnSelectCodCama.setEnabled(false);
-				
-				txtCodInternamiento.setText("");
-				hideButtons();
-				
-				resetFields();
-			}
-		});
-		btnConsultar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnConsultar.setFont(Constantes.regularFont);
-		btnConsultar.setForeground(Constantes.textgray);
-		btnConsultar.setBounds(614, 122, 64, 26);
-		btnConsultar.setCursor(Constantes.pointer);
-		contentPane.add(btnConsultar);
-		btnListar.setForeground(Constantes.textgray);
-		
-		btnEliminar = new JLabel("Eliminar");
-		btnEliminar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnEliminar.setForeground(Constantes.skyblue);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnEliminar.setForeground(Constantes.textgray);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				changeOptionActive("Eliminar");
-				txtBuscar.setEnabled(true);
-				lblInputBuscar.setEnabled(true);
-				lblInputIngresar.setEnabled(true);
-				txtIngresar.setEditable(true);
-				txtIngresar.setEnabled(true);
-				btnBuscar.setEnabled(true);
-				lblBuscar.setEnabled(true);
-				
-				lblInputCodInternamiento.setEnabled(false);
-				txtCodInternamiento.setEditable(false);
-				lblInputNombre.setEnabled(false);
-				txtNombre.setEditable(false);
-				lblInputCodPaciente.setEnabled(false);
-				txtCodPaciente.setEditable(false);
-				lblInputCodCama.setEnabled(false);
-				txtCodCama.setEditable(false);
-				lblSelectCodPaciente.setEnabled(false);
-				btnSelectCodPaciente.setEnabled(false);
-				lblSelectCodCama.setEnabled(false);
-				btnSelectCodCama.setEnabled(false);
-				
-				hideButtons();
-				lblEliminarConfirm.setVisible(true);
-				btnEliminarConfirm.setVisible(true);
-			}
-		});
-		btnEliminar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnEliminar.setFont(Constantes.regularFont);
-		btnEliminar.setForeground(Constantes.textgray);
-		btnEliminar.setBounds(864, 122, 74, 26);
-		btnEliminar.setCursor(Constantes.pointer);
-		contentPane.add(btnEliminar);
-		
-		txtIngresar = new JTextField();
-		txtIngresar.setEnabled(false);
-		txtIngresar.setEditable(false);
-		txtIngresar.setOpaque(false);
-		txtIngresar.setForeground(new Color(68, 68, 68));
-		txtIngresar.setFont(Constantes.regularFont);
-		txtIngresar.setColumns(10);
-		txtIngresar.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtIngresar.setBounds(663, 212, 251, 35);
-		contentPane.add(txtIngresar);
-		
-		txtBuscar = new JTextField();
-		txtBuscar.setEnabled(false);
-		txtBuscar.setDisabledTextColor(Constantes.textgray);
-		txtBuscar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(!txtBuscar.isEnabled()){
-					return;
-				}
-				else {
-					if(cboBuscarPor.isVisible()){
-						cboBuscarPor.setVisible(false);
-					}
-					else {
-						cboBuscarPor.setVisible(true);
-					}
-				}
-			}
-		});
-		txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-			}
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				int cboBuscar = getCboBuscarPor();
-				if(cboBuscar == 1){
-					txtIngresar.setText("PAC");
-					txtIngresar.requestFocus();
-				}
-				else {
-					txtIngresar.setText("");
-				}
-			}
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
-		});
-		txtBuscar.setText("Seleccionar --");
-		txtBuscar.setOpaque(false);
-		txtBuscar.setBorder(new EmptyBorder(0, 10, 0, 10));
-		txtBuscar.setBounds(127, 212, 200, 35);
-		txtBuscar.setEditable(false);
-		txtBuscar.setCursor(Constantes.pointer);
-		txtBuscar.setFont(Constantes.regularFont);
-		txtBuscar.setForeground(Constantes.textgray);
-		contentPane.add(txtBuscar);
-		txtBuscar.setColumns(10);
-		
-		lblInputBuscar = new JLabel("");
-		lblInputBuscar.setEnabled(false);
-		lblInputBuscar.setCursor(Constantes.pointer);
-		lblInputBuscar.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/text-buscar.png")));
-		lblInputBuscar.setBounds(127, 212, 200, 35);
-		contentPane.add(lblInputBuscar);
-		
-		lblBuscarPor = new JLabel("Buscar por:");
-		lblBuscarPor.setFont(Constantes.regularFont);
-		lblBuscarPor.setForeground(Constantes.textgray);
-		lblBuscarPor.setBounds(24, 212, 87, 35);
-		contentPane.add(lblBuscarPor);
-		
-		lblInputIngresar = new JLabel("");
-		lblInputIngresar.setEnabled(false);
-		lblInputIngresar.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/text-ingresar.png")));
-		lblInputIngresar.setBounds(655, 212, 266, 35);
-		contentPane.add(lblInputIngresar);
-		
-		lblIngresar = new JLabel("Ingrese dato seg\u00FAn su selecci\u00F3n:");
-		lblIngresar.setForeground(new Color(68, 68, 68));
-		lblIngresar.setFont(Constantes.regularFont);
-		lblIngresar.setBounds(428, 212, 217, 35);
-		contentPane.add(lblIngresar);
-		
-		lblBuscar = new JLabel("Buscar");
-		lblBuscar.setEnabled(false);
-		lblBuscar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBuscar.setForeground(Color.WHITE);
-		lblBuscar.setFont(Constantes.regularFont);
-		lblBuscar.setBounds(931, 212, 100, 35);
-		lblBuscar.setCursor(Constantes.pointer);
-		contentPane.add(lblBuscar);
-		
-		btnBuscar = new JLabel("");
-		btnBuscar.setEnabled(false);
-		btnBuscar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnBuscar.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login-hover.png")));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnBuscar.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-			}
-			void mostrarDatos(Internamiento data){
-				txtCodInternamiento.setText(data.getCodInternamiento());
-				txtCodPaciente.setText(data.getCodPaciente());
-				txtNombre.setText(data.getNombre());
-				txtCodCama.setText(data.getCodCama());
-				txtFechaIngreso.setText(data.getFechaIngreso());
-				txtHoraIngreso.setText(data.getHoraIngreso());
-				txtFechaSalida.setText(data.getFechaSalida());
-				txtHoraSalida.setText(data.getHoraSalida());
-				txtEstado.setText(data.getEstado());
-				resetearBusqueda();
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(btnBuscar.isEnabled()){
-					int cboSelect = getCboBuscarPor();
-					if(getBusquedaCodigo().contentEquals("") || cboSelect == 0){
-						mensaje("Asegurese de haber seleccionado un filtro e ingresado un término de búsqueda.");
-					}
-					else {
-						String term = getBusquedaCodigo();
-						if(cboSelect == 1){
-							if(term.matches("INT\\d{3}")){
-								Internamiento buscarInternamiento = internamiento.buscarPorCodigoInternamiento(term);
-								if(buscarInternamiento != null){
-									mostrarDatos(buscarInternamiento);
-								}
-								else {
-									mensaje("No hay registros de pacientes con este código.");
-								}
-							}
-							else {
-								mensaje("El código no ha sido ingresado en un formato correcto.\nEjemplo: \"INT001\"");
-							}
-						}
-						if(cboSelect == 2){
-							if(term.matches("PAC\\d{3}")){
-								Internamiento buscarInternamiento = internamiento.buscarPorCodigoPaciente(term);
-								if(buscarInternamiento != null){
-									mostrarDatos(buscarInternamiento);
-								}
-								else {
-									mensaje("No hay registros de pacientes con este código.");
-								}
-							}
-							else {
-								mensaje("El código no ha sido ingresado en un formato correcto.\nEjemplo: \"PAC001\"");
-							}
-						}
-						if(cboSelect == 3){
-							if(term.matches("CAM\\d{3}")){
-								Internamiento buscarInternamiento = internamiento.buscarPorCodigoCama(term);
-								if(buscarInternamiento != null){
-									mostrarDatos(buscarInternamiento);
-								}
-								else {
-									mensaje("No hay registros de pacientes con este código.");
-								}
-							}
-							else {
-								mensaje("El código no ha sido ingresado en un formato correcto.\nEjemplo: \"CAM001\"");
-							}
-						}
-					}
-				}
-				else {
-					return;
-				}
-			}
-		});
-		btnBuscar.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnBuscar.setCursor(Constantes.pointer);
-		btnBuscar.setBounds(931, 212, 100, 35);
-		contentPane.add(btnBuscar);
-		
-		lblAviso = new JLabel("* Opci\u00F3n activa: Listar");
+		lblAviso = new JLabel("* Opci\u00F3n activa: Ingresar");
 		lblAviso.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAviso.setFont(Constantes.regularFont);
 		lblAviso.setBounds(25, 167, 172, 26);
@@ -731,41 +242,26 @@ public class InternamientoPacientes extends JFrame {
 		lblCodInternamiento = new JLabel("C\u00F3digo de Int.:");
 		lblCodInternamiento.setForeground(new Color(68, 68, 68));
 		lblCodInternamiento.setFont(Constantes.regularFont);
-		lblCodInternamiento.setBounds(25, 286, 92, 35);
+		lblCodInternamiento.setBounds(25, 218, 92, 35);
 		contentPane.add(lblCodInternamiento);
 		
 		lblCodPaciente = new JLabel("C\u00F3digo de Pac.:");
 		lblCodPaciente.setForeground(new Color(68, 68, 68));
 		lblCodPaciente.setFont(Constantes.regularFont);
-		lblCodPaciente.setBounds(533, 286, 112, 35);
+		lblCodPaciente.setBounds(533, 218, 112, 35);
 		contentPane.add(lblCodPaciente);
 		
 		lblNombre = new JLabel("Nombre:");
 		lblNombre.setForeground(new Color(68, 68, 68));
 		lblNombre.setFont(Constantes.regularFont);
-		lblNombre.setBounds(25, 332, 87, 35);
+		lblNombre.setBounds(25, 264, 87, 35);
 		contentPane.add(lblNombre);
 		
 		lblFechaIngreso = new JLabel("Fec de ingreso:");
 		lblFechaIngreso.setForeground(new Color(68, 68, 68));
 		lblFechaIngreso.setFont(Constantes.regularFont);
-		lblFechaIngreso.setBounds(25, 379, 100, 35);
+		lblFechaIngreso.setBounds(25, 311, 100, 35);
 		contentPane.add(lblFechaIngreso);
-		
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(25, 481, 1006, 211);
-		contentPane.add(scrollPane);
-		
-		tblTabla = new JScrollPane();
-		scrollPane.setViewportView(tblTabla);
-		
-		table = new JTable();
-		table.setEnabled(false);
-		table.setForeground(Constantes.textgray);
-		table.setFont(Constantes.regularFont);
-		table.setRowHeight(30);
-		table.setFillsViewportHeight(true);
-		tblTabla.setViewportView(table);
 		
 		tabla = new DefaultTableModel();
 		tabla.addColumn("Código de Internamiento");
@@ -777,19 +273,18 @@ public class InternamientoPacientes extends JFrame {
 		tabla.addColumn("Fecha de salida");
 		tabla.addColumn("Hora de salida");
 		tabla.addColumn("Estado");
-		table.setModel(tabla);
 		
 		lblIngresarConfirm = new JLabel("Ingresar");
 		lblIngresarConfirm.setFont(Constantes.regularFont);
 		lblIngresarConfirm.setCursor(Constantes.pointer);
 		lblIngresarConfirm.setForeground(Color.WHITE);
 		lblIngresarConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIngresarConfirm.setBounds(931, 427, 100, 34);
-		lblIngresarConfirm.setVisible(false);
+		lblIngresarConfirm.setBounds(931, 359, 100, 34);
+		lblIngresarConfirm.setVisible(true);
 		contentPane.add(lblIngresarConfirm);
 		
 		btnIngresarConfirm = new JLabel("");
-		btnIngresarConfirm.setVisible(false);
+		btnIngresarConfirm.setVisible(true);
 		btnIngresarConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -809,10 +304,10 @@ public class InternamientoPacientes extends JFrame {
 						internamiento.agregarInternamiento();
 						
 						mensaje("Los nuevos registros han sido grabados correctamente.");
-						listarInternamientos();
 						resetFields();
 						autogenerateCode();
 						autogenerateHoraEstado();
+						infoInternamiento();
 					}
 				}
 				catch(Exception er){
@@ -821,7 +316,7 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		btnIngresarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnIngresarConfirm.setBounds(931, 426, 100, 35);
+		btnIngresarConfirm.setBounds(931, 358, 100, 35);
 		contentPane.add(btnIngresarConfirm);
 		
 		lblEliminarConfirm = new JLabel("Eliminar");
@@ -829,7 +324,7 @@ public class InternamientoPacientes extends JFrame {
 		lblEliminarConfirm.setCursor(Constantes.pointer);
 		lblEliminarConfirm.setForeground(Color.WHITE);
 		lblEliminarConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEliminarConfirm.setBounds(931, 427, 100, 34);
+		lblEliminarConfirm.setBounds(931, 359, 100, 34);
 		lblEliminarConfirm.setVisible(false);
 		contentPane.add(lblEliminarConfirm);
 		
@@ -853,7 +348,6 @@ public class InternamientoPacientes extends JFrame {
 					if(option == 0){
 						internamiento.eliminarInternamiento(dropInternamiento);
 						internamiento.agregarInternamiento();
-						listarInternamientos();
 						resetFields();
 						mensaje("Los registros de este paciente han sido eliminados correctamente.");
 					}
@@ -864,32 +358,32 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		btnEliminarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnEliminarConfirm.setBounds(931, 426, 100, 35);
+		btnEliminarConfirm.setBounds(931, 358, 100, 35);
 		contentPane.add(btnEliminarConfirm);
 		
 		txtCodPaciente = new JTextField();
 		txtCodPaciente.setOpaque(false);
 		txtCodPaciente.setForeground(new Color(68, 68, 68));
-		txtCodPaciente.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtCodPaciente.setFont(Constantes.regularFont);
 		txtCodPaciente.setEditable(false);
 		txtCodPaciente.setColumns(10);
 		txtCodPaciente.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtCodPaciente.setBounds(663, 285, 251, 35);
+		txtCodPaciente.setBounds(663, 217, 251, 35);
 		contentPane.add(txtCodPaciente);
 		
 		lblInputCodPaciente = new JLabel("");
 		lblInputCodPaciente.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/text-ingresar.png")));
-		lblInputCodPaciente.setEnabled(false);
-		lblInputCodPaciente.setBounds(655, 285, 266, 35);
+		lblInputCodPaciente.setEnabled(true);
+		lblInputCodPaciente.setBounds(655, 217, 266, 35);
 		contentPane.add(lblInputCodPaciente);
 		
 		lblSelectCodPaciente = new JLabel("Seleccionar");
 		lblSelectCodPaciente.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSelectCodPaciente.setForeground(Color.WHITE);
-		lblSelectCodPaciente.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		lblSelectCodPaciente.setFont(Constantes.regularFont);
 		lblSelectCodPaciente.setCursor(Constantes.pointer);
-		lblSelectCodPaciente.setEnabled(false);
-		lblSelectCodPaciente.setBounds(931, 285, 100, 35);
+		lblSelectCodPaciente.setEnabled(true);
+		lblSelectCodPaciente.setBounds(931, 217, 100, 35);
 		contentPane.add(lblSelectCodPaciente);
 		
 		buscadorPaciente.addWindowListener(new WindowListener() {
@@ -966,55 +460,55 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		btnSelectCodPaciente.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnSelectCodPaciente.setEnabled(false);
-		btnSelectCodPaciente.setBounds(931, 285, 100, 35);
+		btnSelectCodPaciente.setEnabled(true);
+		btnSelectCodPaciente.setBounds(931, 217, 100, 35);
 		contentPane.add(btnSelectCodPaciente);
 		
 		txtNombre = new JTextField();
 		txtNombre.setOpaque(false);
 		txtNombre.setForeground(new Color(68, 68, 68));
-		txtNombre.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtNombre.setFont(Constantes.regularFont);
 		txtNombre.setEditable(false);
 		txtNombre.setColumns(10);
 		txtNombre.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtNombre.setBounds(135, 332, 358, 35);
+		txtNombre.setBounds(135, 264, 358, 35);
 		contentPane.add(txtNombre);
 		
 		lblInputNombre = new JLabel("");
 		lblInputNombre.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-large.png")));
-		lblInputNombre.setEnabled(false);
-		lblInputNombre.setBounds(127, 332, 376, 35);
+		lblInputNombre.setEnabled(true);
+		lblInputNombre.setBounds(127, 264, 376, 35);
 		contentPane.add(lblInputNombre);
 		
 		lblCodCama = new JLabel("C\u00F3digo de Cama:");
 		lblCodCama.setForeground(new Color(68, 68, 68));
-		lblCodCama.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblCodCama.setBounds(533, 332, 112, 35);
+		lblCodCama.setFont(Constantes.regularFont);
+		lblCodCama.setBounds(533, 264, 112, 35);
 		contentPane.add(lblCodCama);
 		
 		txtCodCama = new JTextField();
 		txtCodCama.setOpaque(false);
 		txtCodCama.setForeground(new Color(68, 68, 68));
-		txtCodCama.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtCodCama.setFont(Constantes.regularFont);
 		txtCodCama.setEditable(false);
 		txtCodCama.setColumns(10);
 		txtCodCama.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtCodCama.setBounds(663, 331, 251, 35);
+		txtCodCama.setBounds(663, 263, 251, 35);
 		contentPane.add(txtCodCama);
 		
 		lblInputCodCama = new JLabel("");
 		lblInputCodCama.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/text-ingresar.png")));
-		lblInputCodCama.setEnabled(false);
-		lblInputCodCama.setBounds(655, 331, 266, 35);
+		lblInputCodCama.setEnabled(true);
+		lblInputCodCama.setBounds(655, 263, 266, 35);
 		contentPane.add(lblInputCodCama);
 		
 		lblSelectCodCama = new JLabel("Seleccionar");
 		lblSelectCodCama.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSelectCodCama.setForeground(Color.WHITE);
 		lblSelectCodCama.setCursor(Constantes.pointer);
-		lblSelectCodCama.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblSelectCodCama.setEnabled(false);
-		lblSelectCodCama.setBounds(931, 331, 100, 35);
+		lblSelectCodCama.setFont(Constantes.regularFont);
+		lblSelectCodCama.setEnabled(true);
+		lblSelectCodCama.setBounds(931, 263, 100, 35);
 		contentPane.add(lblSelectCodCama);
 		
 		btnSelectCodCama = new JLabel("");
@@ -1033,115 +527,131 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		btnSelectCodCama.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnSelectCodCama.setEnabled(false);
-		btnSelectCodCama.setBounds(931, 331, 100, 35);
+		btnSelectCodCama.setEnabled(true);
+		btnSelectCodCama.setBounds(931, 263, 100, 35);
 		contentPane.add(btnSelectCodCama);
 		
 		lblHoraIngreso = new JLabel("Hora de ingreso:");
 		lblHoraIngreso.setForeground(new Color(68, 68, 68));
-		lblHoraIngreso.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblHoraIngreso.setBounds(265, 379, 112, 35);
+		lblHoraIngreso.setFont(Constantes.regularFont);
+		lblHoraIngreso.setBounds(265, 311, 112, 35);
 		contentPane.add(lblHoraIngreso);
 		
 		txtFechaIngreso = new JTextField();
 		txtFechaIngreso.setOpaque(false);
 		txtFechaIngreso.setForeground(new Color(68, 68, 68));
-		txtFechaIngreso.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtFechaIngreso.setFont(Constantes.regularFont);
 		txtFechaIngreso.setEditable(false);
 		txtFechaIngreso.setColumns(10);
 		txtFechaIngreso.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtFechaIngreso.setBounds(135, 379, 115, 35);
+		txtFechaIngreso.setBounds(135, 311, 115, 35);
 		contentPane.add(txtFechaIngreso);
 		
 		lblInputFecIngreso = new JLabel("");
 		lblInputFecIngreso.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-short.png")));
 		lblInputFecIngreso.setEnabled(false);
-		lblInputFecIngreso.setBounds(127, 379, 130, 35);
+		lblInputFecIngreso.setBounds(127, 311, 130, 35);
 		contentPane.add(lblInputFecIngreso);
 		
 		txtHoraIngreso = new JTextField();
 		txtHoraIngreso.setOpaque(false);
 		txtHoraIngreso.setForeground(new Color(68, 68, 68));
-		txtHoraIngreso.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtHoraIngreso.setFont(Constantes.regularFont);
 		txtHoraIngreso.setEditable(false);
 		txtHoraIngreso.setColumns(10);
 		txtHoraIngreso.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtHoraIngreso.setBounds(381, 379, 115, 35);
+		txtHoraIngreso.setBounds(381, 311, 115, 35);
 		contentPane.add(txtHoraIngreso);
 		
 		lblInputHoraIngreso = new JLabel("");
 		lblInputHoraIngreso.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-short.png")));
 		lblInputHoraIngreso.setEnabled(false);
-		lblInputHoraIngreso.setBounds(373, 379, 130, 35);
+		lblInputHoraIngreso.setBounds(373, 311, 130, 35);
 		contentPane.add(lblInputHoraIngreso);
 		
-		txtEstado = new JTextField();
+		txtEstado = new JTextField("Alojado");
 		txtEstado.setOpaque(false);
 		txtEstado.setForeground(new Color(68, 68, 68));
-		txtEstado.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtEstado.setFont(Constantes.regularFont);
 		txtEstado.setEditable(false);
 		txtEstado.setColumns(10);
 		txtEstado.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtEstado.setBounds(135, 427, 358, 35);
+		txtEstado.setBounds(135, 359, 358, 35);
 		contentPane.add(txtEstado);
 		
 		lblFechaSalida = new JLabel("Fec de salida:");
 		lblFechaSalida.setForeground(new Color(68, 68, 68));
-		lblFechaSalida.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblFechaSalida.setBounds(533, 379, 87, 35);
+		lblFechaSalida.setFont(Constantes.regularFont);
+		lblFechaSalida.setBounds(533, 311, 87, 35);
 		contentPane.add(lblFechaSalida);
 		
 		lblHoraSalida = new JLabel("Hora de salida:");
 		lblHoraSalida.setForeground(new Color(68, 68, 68));
-		lblHoraSalida.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblHoraSalida.setBounds(798, 379, 100, 35);
+		lblHoraSalida.setFont(Constantes.regularFont);
+		lblHoraSalida.setBounds(798, 311, 100, 35);
 		contentPane.add(lblHoraSalida);
 		
 		txtFechaSalida = new JTextField();
 		txtFechaSalida.setOpaque(false);
 		txtFechaSalida.setForeground(new Color(68, 68, 68));
-		txtFechaSalida.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtFechaSalida.setFont(Constantes.regularFont);
 		txtFechaSalida.setEnabled(false);
 		txtFechaSalida.setEditable(false);
 		txtFechaSalida.setColumns(10);
 		txtFechaSalida.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtFechaSalida.setBounds(663, 379, 115, 35);
+		txtFechaSalida.setBounds(663, 311, 115, 35);
 		contentPane.add(txtFechaSalida);
 		
 		lblInputFecSalida = new JLabel("");
 		lblInputFecSalida.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-short.png")));
 		lblInputFecSalida.setEnabled(false);
-		lblInputFecSalida.setBounds(655, 379, 130, 35);
+		lblInputFecSalida.setBounds(655, 311, 130, 35);
 		contentPane.add(lblInputFecSalida);
 		
 		txtHoraSalida = new JTextField();
 		txtHoraSalida.setOpaque(false);
 		txtHoraSalida.setForeground(new Color(68, 68, 68));
-		txtHoraSalida.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
+		txtHoraSalida.setFont(Constantes.regularFont);
 		txtHoraSalida.setEnabled(false);
 		txtHoraSalida.setEditable(false);
 		txtHoraSalida.setColumns(10);
 		txtHoraSalida.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtHoraSalida.setBounds(909, 379, 115, 35);
+		txtHoraSalida.setBounds(909, 311, 115, 35);
 		contentPane.add(txtHoraSalida);
 		
 		lblInputHoraSalida = new JLabel("");
 		lblInputHoraSalida.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-short.png")));
 		lblInputHoraSalida.setEnabled(false);
-		lblInputHoraSalida.setBounds(901, 379, 130, 35);
+		lblInputHoraSalida.setBounds(901, 311, 130, 35);
 		contentPane.add(lblInputHoraSalida);
 		
 		lblEstado = new JLabel("Estado:");
 		lblEstado.setForeground(new Color(68, 68, 68));
-		lblEstado.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblEstado.setBounds(24, 426, 87, 35);
+		lblEstado.setFont(Constantes.regularFont);
+		lblEstado.setBounds(24, 358, 87, 35);
 		contentPane.add(lblEstado);
 		
 		lblInputSeleccionarEstado = new JLabel("");
 		lblInputSeleccionarEstado.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/input-text-large.png")));
 		lblInputSeleccionarEstado.setEnabled(false);
-		lblInputSeleccionarEstado.setBounds(127, 427, 376, 35);
+		lblInputSeleccionarEstado.setBounds(127, 359, 376, 35);
 		contentPane.add(lblInputSeleccionarEstado);
+		
+		lblInfo = new JLabel("Informaci\u00F3n de internamiento de pacientes:");
+		lblInfo.setForeground(Constantes.textgray);
+		lblInfo.setFont(Constantes.regularFont);
+		lblInfo.setBounds(25, 427, 468, 26);
+		contentPane.add(lblInfo);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(25, 456, 1006, 239);
+		contentPane.add(scrollPane);
+		
+		txtInfo = new JTextArea();
+		txtInfo.setMargin(new Insets(12, 12, 12, 12));
+		txtInfo.setFont(Constantes.regularFont);
+		txtInfo.setEditable(false);
+		scrollPane.setViewportView(txtInfo);
 		
 		lblBackground.setIcon(backfinal);
 		lblBackground.setBounds(0, 0, xSize-310, ySize-50);
@@ -1158,58 +668,15 @@ public class InternamientoPacientes extends JFrame {
         setLocation(x, y);
         setVisible(true);
         
-        listarInternamientos();
-        
-        
-        
-	}
-	
-	private int getCboBuscarPor(){
-		String cboSelect = txtBuscar.getText();
-		if(cboSelect.contentEquals("Código de internamiento"))
-			return 1;
-		else if(cboSelect.contentEquals("Código de paciente"))
-			return 2;
-		else if(cboSelect.contentEquals("Código de cama"))
-			return 3;
-		else
-			return 0;
-	}
-	
-	private void listarInternamientos(){
-		tabla.setRowCount(0);
-		for(int i = 0; i < internamiento.tamanio(); i++){
-			Object[] data = {
-				internamiento.obtener(i).getCodInternamiento(),
-				internamiento.obtener(i).getCodPaciente(),
-				internamiento.obtener(i).getNombre(),
-				internamiento.obtener(i).getCodCama(),
-				internamiento.obtener(i).getFechaIngreso(),
-				internamiento.obtener(i).getHoraIngreso(),
-				internamiento.obtener(i).getFechaSalida(),
-				internamiento.obtener(i).getHoraSalida(),
-				internamiento.obtener(i).getEstado()
-			};
-			tabla.addRow(data);
-		}
+        autogenerateHoraEstado();
+        autogenerateCode();
 	}
 	
 	private void mensaje(String msg){
 		JOptionPane.showMessageDialog(null, msg);
 	}
 	
-	private String getBusquedaCodigo(){
-		return txtIngresar.getText();
-	}
-	
-	private void resetearBusqueda(){
-		txtBuscar.setText("Seleccionar --");
-		txtIngresar.setText("");
-	}
-	
 	private void resetFields(){
-		txtBuscar.setText("Seleccionar --");
-		txtIngresar.setText("");
 		txtCodInternamiento.setText("");
 		txtCodPaciente.setText("");
 		txtNombre.setText("");
@@ -1281,4 +748,19 @@ public class InternamientoPacientes extends JFrame {
 		txtEstado.setText("Alojado");
 	}
 	
+	private void imprimir(String s){
+		txtInfo.append(s + "\n");
+	}
+	
+	private void infoInternamiento(){
+		imprimir("Código de internamiento: " + getCodInternamiento());
+		imprimir("Código de paciente: " + getCodPaciente());
+		imprimir("Nombre de paciente: " + getNombre());
+		imprimir("Código de cama: " + getCodCama());
+		imprimir("Fecha de ingreso: " + getFechaIngreso());
+		imprimir("Hora de ingreso: " + getHoraIngreso());
+		imprimir("Fecha de salida: No definido");
+		imprimir("Hora de salida: No definido");
+		imprimir("Estado: " + getEstado());
+	}
 }

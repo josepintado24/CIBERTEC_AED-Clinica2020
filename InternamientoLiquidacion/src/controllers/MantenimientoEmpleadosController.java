@@ -12,11 +12,15 @@ import models.Paciente;
 public class MantenimientoEmpleadosController {
 
 	private ArrayList<Empleado> empleado;
+	private ArrayList<Empleado> busquedaEmpleadoApellido;
+	private ArrayList<Empleado> busquedaEmpleadoDni;
 	private String file;
 	
 	public MantenimientoEmpleadosController(String file){
 		this.empleado = new ArrayList<Empleado>();
 		this.file = file;
+		this.busquedaEmpleadoApellido = new ArrayList<Empleado>();
+		this.busquedaEmpleadoDni = new ArrayList<Empleado>();
 		cargarEmpleados();
 	}
 	
@@ -124,8 +128,8 @@ public class MantenimientoEmpleadosController {
 				codigo = data[0];
 				nombre = data[1];
 				apellidos = data[2];
-				dni = Integer.parseInt(data[3]);
-				telefono = Integer.parseInt(data[4]);
+				telefono = Integer.parseInt(data[3]);
+				dni = Integer.parseInt(data[4]);
 				cargo = data[5];
 				user = data[6];
 				password = data[7];
@@ -136,6 +140,38 @@ public class MantenimientoEmpleadosController {
 		catch(Exception err){
 			System.out.println("error: " + err);
 		}
+	}
+	
+	public ArrayList<Empleado> listEmpleadoApellido(String apellido){
+		busquedaEmpleadoApellido.clear();
+		for(int i = 0; i < tamanio(); i++){
+			String term = removeAcent(obtener(i).getApellidos());
+			if(term.toLowerCase().startsWith(apellido) || term.startsWith(apellido) || term.toUpperCase().startsWith(apellido)){
+				busquedaEmpleadoApellido.add(obtener(i));
+			}
+		}
+		return busquedaEmpleadoApellido;
+	}
+	
+	public ArrayList<Empleado> listEmpleadoDni(String dni){
+		busquedaEmpleadoDni.clear();
+		for(int i = 0; i < tamanio(); i++){
+			String term = Integer.toString(obtener(i).getDni());
+			if(term.startsWith(dni)){
+				busquedaEmpleadoDni.add(obtener(i));
+			}
+		}
+		return busquedaEmpleadoDni;
+	}
+	
+	public String removeAcent(String input) {
+	    String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+	    String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+	    String output = input;
+	    for(int i = 0; i < original.length(); i++) {
+	        output = output.replace(original.charAt(i), ascii.charAt(i));
+	    }
+	    return output;
 	}
 	
 }

@@ -313,7 +313,6 @@ public class MantenimientoPacientes extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				changeOptionActive("Listar");
-//				btnListar.setForeground(Constantes.skyblue);
 				txtBuscar.setEnabled(false);
 				lblInputBuscar.setEnabled(false);
 				lblInputIngresar.setEnabled(false);
@@ -335,6 +334,7 @@ public class MantenimientoPacientes extends JFrame {
 				
 				txtCodigo.setText("");
 				hideButtons();
+				listarPacientes();
 			}
 		});
 		

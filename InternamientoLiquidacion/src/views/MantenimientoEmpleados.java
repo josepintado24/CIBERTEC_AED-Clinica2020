@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -30,9 +31,14 @@ import javax.swing.table.DefaultTableModel;
 
 import constantes.Constantes;
 import controllers.MantenimientoEmpleadosController;
+import models.Cama;
 import models.Empleado;
+import models.Paciente;
+
 import java.awt.Font;
 import javax.swing.JPasswordField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MantenimientoEmpleados extends JFrame {
 
@@ -437,7 +443,6 @@ public class MantenimientoEmpleados extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				changeOptionActive("Listar");
-//				btnListar.setForeground(Constantes.skyblue);
 				txtBuscar.setEnabled(false);
 				lblInputBuscar.setEnabled(false);
 				lblInputIngresar.setEnabled(false);
@@ -466,6 +471,7 @@ public class MantenimientoEmpleados extends JFrame {
 				
 				txtCodigo.setText("");
 				hideButtons();
+				listarEmpleados();
 			}
 		});
 		
@@ -704,6 +710,86 @@ public class MantenimientoEmpleados extends JFrame {
 		contentPane.add(label);
 		
 		txtIngresar = new JTextField();
+		txtIngresar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent evt) {
+				int cboSelect = getCboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un tÈrmino de b˙squeda.");
+				}
+				else {
+					if(cboSelect == 1){
+						if(txtIngresar.getText().length() == 6){
+							evt.consume();
+						}
+					}
+					if(cboSelect == 3){
+						if(txtIngresar.getText().length() == 8){
+							evt.consume();
+						}
+					}
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent evt) {
+				int cboSelect = getCboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un tÈrmino de b˙squeda.");
+				}
+				else {
+					String term = getBusquedaCodigo();
+					if(cboSelect == 1){
+						
+					}
+					if(cboSelect == 2){
+						if(term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄\\s+]{0,25}") || term.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄+]{0,25}")){
+							ArrayList<Empleado> buscarEmpleado = empleado.listEmpleadoApellido(term); 
+							if(buscarEmpleado != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarEmpleado.size(); i++){
+									Object[] data = {
+										buscarEmpleado.get(i).getCodEmpleado(),
+										buscarEmpleado.get(i).getNombre(),
+										buscarEmpleado.get(i).getApellidos(),
+										buscarEmpleado.get(i).getDni(),
+										buscarEmpleado.get(i).getTelefono(),
+										buscarEmpleado.get(i).getCargo(),
+										buscarEmpleado.get(i).getUser()
+									};
+									tabla.addRow(data);
+								}
+							}
+							else {
+								mensaje("No hay registros de pacientes con este apellido.");
+							}
+						}
+						else {
+							mensaje("El apellido no ha sido ingresado en un formato correcto.\nIngrese sÛlo letras.");
+						}
+					}
+					if(cboSelect == 3){
+						if(term.matches("\\d+") || evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+							ArrayList<Empleado> buscarEmpleado = empleado.listEmpleadoDni(term);
+							if(buscarEmpleado != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarEmpleado.size(); i++){
+									Object[] data = {
+										buscarEmpleado.get(i).getCodEmpleado(),
+										buscarEmpleado.get(i).getNombre(),
+										buscarEmpleado.get(i).getApellidos(),
+										buscarEmpleado.get(i).getDni(),
+										buscarEmpleado.get(i).getTelefono(),
+										buscarEmpleado.get(i).getCargo(),
+										buscarEmpleado.get(i).getUser()
+									};
+									tabla.addRow(data);
+								}
+							}
+						}
+					}
+				}
+			}
+		});
 		txtIngresar.setEnabled(false);
 		txtIngresar.setEditable(false);
 		txtIngresar.setOpaque(false);
@@ -983,7 +1069,22 @@ public class MantenimientoEmpleados extends JFrame {
 		scrollPane.setViewportView(tblTabla);
 		
 		table = new JTable();
-		table.setEnabled(false);
+		table.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent evt){
+				int rowIndex = table.getSelectedRow();
+				String code = table.getValueAt(rowIndex, 0).toString();
+				Empleado getEmpleado = empleado.buscarPorCodigo(code);
+				txtCodigo.setText(getEmpleado.getCodEmpleado());
+				txtNombre.setText(getEmpleado.getNombre());
+				txtApellidos.setText(getEmpleado.getApellidos());
+				txtDni.setText("" + getEmpleado.getDni());
+				txtTelefono.setText("" + getEmpleado.getTelefono());
+				txtCargo.setText(getEmpleado.getCargo());
+				txtUsuario.setText(getEmpleado.getUser());
+				txtPassword.setText(getEmpleado.getPassword());
+			}
+		});
 		table.setForeground(Constantes.textgray);
 		table.setFont(Constantes.regularFont);
 		table.setRowHeight(30);
@@ -1046,13 +1147,14 @@ public class MantenimientoEmpleados extends JFrame {
 					
 					int option = JOptionPane.showConfirmDialog(null, "øEst· seguro de ingresar los registros de un nuevo empleado?", "Confirmar ingreso de datos", JOptionPane.OK_CANCEL_OPTION);
 					if(option == 0){
-						Empleado newEmpleado = new Empleado(txtCodigo.getText(), nombre, apellidos, telefono, dni, cargo, usuario, password);
+						Empleado newEmpleado = new Empleado(txtCodigo.getText(), nombre, apellidos, dni, telefono, cargo, usuario, password);
 						empleado.adicionar(newEmpleado);
 						empleado.agregarEmpleado();
 						
 						mensaje("Los nuevos registros han sido grabados correctamente.");
 						listarEmpleados();
 						resetFields();
+						txtNombre.requestFocus();
 						autogenerateCode();
 					}
 				}
@@ -1209,6 +1311,12 @@ public class MantenimientoEmpleados extends JFrame {
 		contentPane.add(lblDni);
 		
 		txtDni = new JTextField();
+		txtDni.addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyTyped(KeyEvent evt){
+				if(txtDni.getText().length() == 8) evt.consume();
+			}
+		});
 		txtDni.setOpaque(false);
 		txtDni.setForeground(Constantes.textgray);
 		txtDni.setFont(Constantes.regularFont);
@@ -1231,6 +1339,12 @@ public class MantenimientoEmpleados extends JFrame {
 		contentPane.add(lblTelefono);
 		
 		txtTelefono = new JTextField();
+		txtTelefono.addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyTyped(KeyEvent evt){
+				if(txtTelefono.getText().length() == 9) evt.consume();
+			}
+		});
 		txtTelefono.setOpaque(false);
 		txtTelefono.setForeground(Constantes.textgray);
 		txtTelefono.setFont(Constantes.regularFont);

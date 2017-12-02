@@ -14,5 +14,6 @@ public class Constantes {
 	public static final Font regularFont = new Font("Josefin Sans", Font.PLAIN, 14);
 	public static final Font boldFont = new Font("Josefin Sans", Font.BOLD, 16);
 	public static final Color hoverFont = new Color(233, 233, 233);
+	public static final Cursor textCursor = new Cursor(Cursor.TEXT_CURSOR);
 	
 }

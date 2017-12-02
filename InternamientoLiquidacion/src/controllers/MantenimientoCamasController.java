@@ -12,14 +12,13 @@ public class MantenimientoCamasController {
 
 	private ArrayList<Cama> cama;
 	private String file;
+	private ArrayList<Cama> busquedaCamaEstado;
 	
 	public MantenimientoCamasController(String file){
 		cama = new ArrayList<Cama>();
 		this.file = file;
 		cargarPacientes();
-//		cama.add(new Cama(1, 25, 0));
-//		cama.add(new Cama(2, 30, 1));
-//		cama.add(new Cama(3, 40, 0));
+		busquedaCamaEstado = new ArrayList<Cama>();
 	}
 	
 	public int tamanio(){
@@ -113,6 +112,16 @@ public class MantenimientoCamasController {
 			if(obtener(i).getEstado().equalsIgnoreCase(estado))
 				return obtener(i);
 		return null;
+	}
+	
+	public ArrayList<Cama> listCamaEstado(String term){
+		busquedaCamaEstado.clear();
+		for(int i = 0; i < tamanio(); i++){
+			if(obtener(i).getEstado().equalsIgnoreCase(term)){
+				busquedaCamaEstado.add(obtener(i));
+			}
+		}
+		return busquedaCamaEstado;
 	}
 	
 }
