@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import models.DetalleAtencion;
 
 public class DetalleAtencionController {
+	
 	private ArrayList<DetalleAtencion> detalle;
+	private ArrayList<DetalleAtencion> listDetalle;
 	private String file;
 
 	public DetalleAtencionController(String file) {
 		detalle = new ArrayList<DetalleAtencion>();
+		listDetalle = new ArrayList<DetalleAtencion>();
 		this.file = file;
 		cargarDetalle();
 	}
@@ -81,11 +84,12 @@ public class DetalleAtencionController {
 		return null;
 	}
 	
-	public DetalleAtencion buscarPorCodigoAtencion(String codigo){
+	public ArrayList<DetalleAtencion> buscarPorCodigoAtencion(String codigo){
+		listDetalle.clear();
 		for (int i = 0; i < tamano(); i++)
 			if (obtener(i).getCodAtencion().equalsIgnoreCase(codigo))
-				return obtener(i);
-		return null;
+				listDetalle.add(obtener(i));
+		return listDetalle;
 	}
 
 }

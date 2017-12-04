@@ -263,7 +263,7 @@ public class Register extends JFrame {
 		lblNombre = new JLabel("Nombre:");
 		lblNombre.setForeground(new Color(68, 68, 68));
 		lblNombre.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
-		lblNombre.setBounds(363, 93, 51, 14);
+		lblNombre.setBounds(363, 93, 71, 14);
 		contentPane.add(lblNombre);
 		
 		lblBackCodigo = new JLabel("");
@@ -366,7 +366,7 @@ public class Register extends JFrame {
 		lblBackUsuario.setBounds(363, 198, 290, 45);
 		contentPane.add(lblBackUsuario);
 		
-		lblUsuario = new JLabel("Usuario (con este identificador iniciar\u00E1s sesi\u00F3n):");
+		lblUsuario = new JLabel("Usuario (inicio de sesi\u00F3n):");
 		lblUsuario.setForeground(new Color(68, 68, 68));
 		lblUsuario.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
 		lblUsuario.setBounds(363, 178, 264, 14);

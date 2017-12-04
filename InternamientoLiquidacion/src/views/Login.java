@@ -249,7 +249,7 @@ public class Login extends JFrame {
 		lblNuevo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNuevo.setFont(Constantes.regularFont);
 		lblNuevo.setCursor(Constantes.pointer);
-		lblNuevo.setBounds(149, 381, 122, 14);
+		lblNuevo.setBounds(137, 381, 145, 14);
 		contentPane.add(lblNuevo);
 		
 		register.addWindowListener(new WindowListener() {

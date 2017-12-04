@@ -8,11 +8,18 @@ import java.util.ArrayList;
 import models.Atencion;
 
 public class AtencionController {
+	
 	private ArrayList<Atencion> atencion;
+	private ArrayList<Atencion> busquedaAtencion;
+	private ArrayList<Atencion> atencionesPagadas;
+	private ArrayList<Atencion> atencionesPagadasBuscar;
 	private String file;
 	
 	public AtencionController(String file){
 		atencion = new ArrayList<Atencion>();
+		busquedaAtencion = new ArrayList<Atencion>();
+		atencionesPagadas = new ArrayList<Atencion>();
+		atencionesPagadasBuscar = new ArrayList<Atencion>();
 		this.file = file;
 		cargarAtencion();
 	}
@@ -85,11 +92,58 @@ public class AtencionController {
 		return mayor;
 	}
 	
-	public Atencion Buscar(String cod){
+	public Atencion buscarPorCodigo(String cod){
 		for(int i=0;i<tamano();i++)
 			if(obtener(i).getCodAtencion().equals(cod))
 				return obtener(i);
 		return null;
+	}
+	
+	public Atencion buscarPorCodigoPaciente(String cod){
+		for(int i=0;i<tamano();i++)
+			if(obtener(i).getCodPaciente().equals(cod))
+				return obtener(i);
+		return null;
+	}
+	
+	public ArrayList<Atencion> listAtencionEstado(String estado){
+		busquedaAtencion.clear();
+		for(int i = 0; i < tamano(); i++){
+			if(obtener(i).getEstado().equalsIgnoreCase(estado)){
+				busquedaAtencion.add(obtener(i));
+			}
+		}
+		return busquedaAtencion;
+	}
+	
+	public ArrayList<Atencion> listAtencionesPagadas(){
+		atencionesPagadas.clear();
+		for(int i = 0; i < tamano(); i++){
+			if(obtener(i).getEstado().equalsIgnoreCase("Pagado")){
+				atencionesPagadas.add(obtener(i));
+			}
+		}
+		return atencionesPagadas;
+	}
+	
+	public ArrayList<Atencion> listAtencionesPagadasCodAtencion(String codigo){
+		atencionesPagadasBuscar.clear();
+		for(int i = 0; i < atencionesPagadas.size(); i++){
+			if(atencionesPagadas.get(i).getCodAtencion().startsWith(codigo)){
+				atencionesPagadasBuscar.add(atencionesPagadas.get(i));
+			}
+		}
+		return atencionesPagadasBuscar;
+	}
+	
+	public ArrayList<Atencion> listAtencionesPagadasCodPaciente(String codigo){
+		atencionesPagadasBuscar.clear();
+		for(int i = 0; i < atencionesPagadas.size(); i++){
+			if(atencionesPagadas.get(i).getCodPaciente().startsWith(codigo)){
+				atencionesPagadasBuscar.add(atencionesPagadas.get(i));
+			}
+		}
+		return atencionesPagadasBuscar;
 	}
 	
 }

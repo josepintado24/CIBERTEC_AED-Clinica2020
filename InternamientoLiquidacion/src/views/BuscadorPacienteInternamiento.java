@@ -457,8 +457,14 @@ public class BuscadorPacienteInternamiento extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(!txtPaciente.getText().contentEquals("")){
-					sendCodPaciente();
-					dispose();
+					Internamiento getInternado = internamiento.buscarPorCodigoPaciente(txtCodigo.getText());
+					if(getInternado.getEstado().equalsIgnoreCase("Alta")){
+						mensaje("El paciente seleccionado ya se encuentra dado de alta.");
+					}
+					else {
+						sendCodPaciente();
+						dispose();
+					}
 				}
 				else {
 					mensaje("Asegurese de seleccionar un código de paciente por favor.");

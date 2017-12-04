@@ -16,6 +16,7 @@ import java.awt.event.WindowListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -36,11 +37,14 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import constantes.Constantes;
+import controllers.AtencionController;
+import controllers.DetalleAtencionController;
 import controllers.InternamientoPacientesController;
-import controllers.MantenimientoCamasController;
+import controllers.MantenimientoMedicinasController;
 import controllers.MantenimientoPacientesController;
-import models.Cama;
-import models.Internamiento;
+import models.Atencion;
+import models.DetalleAtencion;
+import models.Medicina;
 import models.Paciente;
 
 public class PagoMedicinas extends JFrame {
@@ -48,9 +52,10 @@ public class PagoMedicinas extends JFrame {
 	Constantes constantes = new Constantes();
 	InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
 	MantenimientoPacientesController paciente = new MantenimientoPacientesController("pacientes.txt");
-	MantenimientoCamasController cama = new MantenimientoCamasController("camas.txt");
-	BuscadorPacienteInternamiento buscadorPaciente = new BuscadorPacienteInternamiento();
-	BuscadorCama buscadorCama = new BuscadorCama();
+	AtencionController atencion = new AtencionController("atencion.txt");
+	DetalleAtencionController detalleAtencion = new DetalleAtencionController("detalle.txt");
+	MantenimientoMedicinasController medicina = new MantenimientoMedicinasController("medicinas.txt");
+	BuscadorAtencion buscadorAtencion = new BuscadorAtencion();
 	DateFormat hourFormat = new SimpleDateFormat("HH:mm");
 	DateFormat dayFormat = new SimpleDateFormat("dd/MM/yyyy");
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -116,8 +121,7 @@ public class PagoMedicinas extends JFrame {
 	 * Create the frame.
 	 */
 	public PagoMedicinas() {
-		buscadorPaciente.setVisible(false);
-		buscadorCama.setVisible(false);
+		buscadorAtencion.setVisible(false);
 		setBackground(Color.WHITE);
 		// Obtener el tamaño de la pantalla
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -273,23 +277,36 @@ public class PagoMedicinas extends JFrame {
 						mensaje("Elija los servicios de una paciente internado que desee pagar.");
 					}
 					else {
-						tabla.setRowCount(0);
-						Object[] data = {
-							txtCodAtencion.getText(),
-							txtPaciente.getText(),
-//							txtFechaIngreso.getText(),
-//							txtHoraIngreso.getText(),
-//							txtFechaSalida.getText(),
-//							txtHoraSalida.getText(),
-//							txtEstado.getText(),
-//							txtDiasInt.getText(),
-//							txtPrecioCama.getText(),
-//							txtTotalPagar.getText()
-						};
+						String code = buscadorAtencion.sendCodAtencion();
+						Atencion getAtencion = atencion.buscarPorCodigo(code);
+						Paciente getPaciente = paciente.buscarPorCodigo(getAtencion.getCodPaciente());
+						ArrayList<DetalleAtencion> lista = detalleAtencion.buscarPorCodigoAtencion(code);
+						getAtencion.setEstado(txtEstado.getText());
+						atencion.guardarAtencion();
 						mensaje("El pago se ha realizado de manera exitosa.");
-						tabla.addRow(data);
-						infoPago();
 						resetFields();
+						txtInfo.setText("");
+						
+						imprimir("CLÍNICA JUAN PABLO II");
+						imprimir("Detalle de pago de medicinas:");
+						imprimir("------------------------------------------------");
+						imprimir("Código de atención: " + txtCodAtencion.getText());
+						imprimir("Codigo de paciente: " + txtCodPaciente.getText());
+						imprimir("Paciente: " + getPaciente.getNombres() + " " + getPaciente.getApellidos());
+						imprimir("Estado: " + txtEstado.getText());
+						imprimir("------------------------------------------------");
+						imprimir("Detalle de medicinas: ");
+						imprimir("------------------------------------------------");
+						for(int i = 0; i < lista.size(); i++){
+							Medicina getMedicina = medicina.buscarPorCodigo(lista.get(i).getCodMedicina());
+							imprimir("Medicina: " + (i+1) + ":");
+							imprimir("Código de medicina: " + getMedicina.getCodMedicina());
+							imprimir("Precio unitario: " + getMedicina.getPrecio());
+							imprimir("Cantidad: " + lista.get(i).getCantidad());
+							imprimir("Precio por medicina: " + lista.get(i).getTotalPagar());
+							imprimir("------------------------------------------------");
+						}
+						imprimir("Total a pagar: " + txtTotalPagar.getText());
 					}
 				}
 				catch(Exception er){
@@ -326,7 +343,7 @@ public class PagoMedicinas extends JFrame {
 		lblSelectCodPaciente.setBounds(421, 215, 100, 35);
 		contentPane.add(lblSelectCodPaciente);
 		
-		buscadorPaciente.addWindowListener(new WindowListener() {
+		buscadorAtencion.addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(java.awt.event.WindowEvent arg0) {
 			}
@@ -344,33 +361,24 @@ public class PagoMedicinas extends JFrame {
 			}
 			@Override
 			public void windowClosed(java.awt.event.WindowEvent arg0) {
-				String code = buscadorPaciente.sendCodPaciente();
-				Internamiento getInternamiento = internamiento.buscarPorCodigoPaciente(code);
-				Paciente getPaciente = paciente.buscarPorCodigo(code);
-				txtCodAtencion.setText(getInternamiento.getCodPaciente());
-				txtPaciente.setText(getInternamiento.getCodCama());
-				txtCodPaciente.setText(getInternamiento.getNombre() + " " + getPaciente.getApellidos());
-//				txtFechaIngreso.setText(getInternamiento.getFechaIngreso());
-//				txtHoraIngreso.setText(getInternamiento.getHoraIngreso());
-				txtEstado.setText("Libre");
-				Cama getCama = cama.buscarPorCodigo(txtPaciente.getText());
-//				txtPrecioCama.setText("" + getCama.getPrecioDia());
-				autogenerateHoraEstado();
-//				try{
-//					Date fechaIngreso = dayFormat.parse(txtFechaIngreso.getText());
-//					Date fechaSalida = dayFormat.parse(txtFechaSalida.getText());
-//					txtDiasInt.setText("" + diffDate(fechaIngreso, fechaSalida));
-//					double totalPagar = diffDate(fechaIngreso, fechaSalida) * getCama.getPrecioDia();
-//					if(diffDate(fechaIngreso, fechaSalida) == 0){
-//						txtTotalPagar.setText("S/. " + decimalFormat.format(getCama.getPrecioDia() / 2));
-//					}
-//					else {
-//						txtTotalPagar.setText("S/. " + decimalFormat.format(totalPagar));
-//					}
-//				}
-//				catch(Exception err){
-//					System.out.println("Error en formato de fecha: " + err);
-//				}
+				String code = buscadorAtencion.sendCodAtencion();
+				Atencion getAtencion = atencion.buscarPorCodigo(code);
+				Paciente getPaciente = paciente.buscarPorCodigo(getAtencion.getCodPaciente());
+				ArrayList<DetalleAtencion> lista = detalleAtencion.buscarPorCodigoAtencion(code);
+				txtCodAtencion.setText(getAtencion.getCodAtencion());
+				txtCodPaciente.setText(getAtencion.getCodPaciente());
+				txtPaciente.setText(getPaciente.getNombres() + " " + getPaciente.getApellidos());
+				txtTotalPagar.setText("S/. " + getAtencion.getTotalPagar());
+				tabla.setRowCount(0);
+				for(int i = 0; i < lista.size(); i++){
+					Object data[] = {
+						lista.get(i).getCodMedicina(),
+						lista.get(i).getCantidad(),
+						lista.get(i).getPrecioUnitario(),
+						lista.get(i).getTotalPagar()
+					};
+					tabla.addRow(data);
+				}
 			}
 			@Override
 			public void windowActivated(java.awt.event.WindowEvent arg0) {
@@ -389,9 +397,9 @@ public class PagoMedicinas extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				buscadorPaciente.setVisible(true);
-				String codPaciente = buscadorPaciente.sendCodPaciente();
-				txtCodAtencion.setText(codPaciente);
+				buscadorAtencion.setVisible(true);
+//				String codPaciente = buscadorPaciente.sendCodPaciente();
+//				txtCodAtencion.setText(codPaciente);
 			}
 		});
 		btnSelectCodPaciente.setIcon(new ImageIcon(PagoMedicinas.class.getResource("/views/images/btn-login.png")));
@@ -560,23 +568,4 @@ public class PagoMedicinas extends JFrame {
 	private void imprimir(String info){
 		txtInfo.append(info + "\n");
 	}
-	
-	private void infoPago(){
-		txtInfo.setText("");
-		imprimir("CLÍNICA JUAN PABLO II");
-		imprimir("Detalle de pago de internamiento:");
-		imprimir("------------------------------------------------");
-		imprimir("Código de paciente: " + txtCodAtencion.getText());
-		imprimir("Código de cama: " + txtPaciente.getText());
-//		imprimir("Fecha de ingreso: " + txtFechaIngreso.getText());
-//		imprimir("Hora de ingreso: " + txtHoraIngreso.getText());
-//		imprimir("Fecha de salida:" + txtFechaSalida.getText());
-//		imprimir("Hora de salida: " + txtHoraSalida.getText());
-		imprimir("Estado de cama: " + txtEstado.getText());
-//		imprimir("Días de internamiento: " + txtDiasInt.getText());
-//		imprimir("Precio de cama por día: " + txtPrecioCama.getText());
-		imprimir("------------------------------------------------");
-//		imprimir("Total a pagar: " + txtTotalPagar.getText());
-	}
-	
 }

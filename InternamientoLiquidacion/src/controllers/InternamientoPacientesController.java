@@ -11,10 +11,14 @@ import models.Internamiento;
 public class InternamientoPacientesController {
 
 	private ArrayList<Internamiento> internamiento;
+	private ArrayList<Internamiento> busquedaInternado;
+	private ArrayList<Internamiento> internamientoPagadoBuscar;
 	private String file;
 	
 	public InternamientoPacientesController(String file){
 		internamiento = new ArrayList<Internamiento>();
+		busquedaInternado = new ArrayList<Internamiento>();
+		internamientoPagadoBuscar = new ArrayList<Internamiento>();
 		this.file = file;
 		cargarInternamientos();
 	}
@@ -50,6 +54,69 @@ public class InternamientoPacientesController {
 			if (obtener(i).getCodCama().equalsIgnoreCase(codigo))
 				return obtener(i);
 		return null;
+	}
+	
+	public ArrayList<Internamiento> listInternadoCodigoInternamiento(String codigo){
+		busquedaInternado.clear();
+		for(int i = 0; i < tamanio(); i++){
+			if(obtener(i).getCodInternamiento().startsWith(codigo))
+				busquedaInternado.add(obtener(i));
+		}
+		return busquedaInternado;
+	}
+	
+	public ArrayList<Internamiento> listInternadoCodigoPaciente(String codigo){
+		busquedaInternado.clear();
+		for(int i = 0; i < tamanio(); i++){
+			if(obtener(i).getCodPaciente().startsWith(codigo))
+				busquedaInternado.add(obtener(i));
+		}
+		return busquedaInternado;
+	}
+	
+	public ArrayList<Internamiento> listInternadoCodigoCama(String codigo){
+		busquedaInternado.clear();
+		for(int i = 0; i < tamanio(); i++){
+			if(obtener(i).getCodCama().startsWith(codigo))
+				busquedaInternado.add(obtener(i));
+		}
+		return busquedaInternado;
+	}
+	
+	public ArrayList<Internamiento> listInternadoPagado(){
+		busquedaInternado.clear();
+		for(int i = 0; i < tamanio(); i++){
+			if(obtener(i).getEstado().equalsIgnoreCase("Alta"))
+				busquedaInternado.add(obtener(i));
+		}
+		return busquedaInternado;
+	}
+	
+	public ArrayList<Internamiento> listInternadoPagadoBuscarCodInternamiento(String codigo){
+		internamientoPagadoBuscar.clear();
+		for(int i = 0; i < busquedaInternado.size(); i++){
+			if(busquedaInternado.get(i).getCodInternamiento().startsWith(codigo))
+				internamientoPagadoBuscar.add(busquedaInternado.get(i));
+		}
+		return internamientoPagadoBuscar;
+	}
+	
+	public ArrayList<Internamiento> listInternadoPagadoBuscarCodPaciente(String codigo){
+		internamientoPagadoBuscar.clear();
+		for(int i = 0; i < busquedaInternado.size(); i++){
+			if(busquedaInternado.get(i).getCodPaciente().startsWith(codigo))
+				internamientoPagadoBuscar.add(busquedaInternado.get(i));
+		}
+		return internamientoPagadoBuscar;
+	}
+	
+	public ArrayList<Internamiento> listInternadoPagadoBuscarCodCama(String codigo){
+		internamientoPagadoBuscar.clear();
+		for(int i = 0; i < busquedaInternado.size(); i++){
+			if(obtener(i).getCodCama().startsWith(codigo))
+				internamientoPagadoBuscar.add(obtener(i));
+		}
+		return internamientoPagadoBuscar;
 	}
 	
 	public void agregarInternamiento(){

@@ -33,6 +33,9 @@ public class Menu extends JFrame {
 	AtencionMedicinas atencionMedicinas = new AtencionMedicinas();
 	PagoMedicinas pagoMedicinas = new PagoMedicinas();
 	PagoInternamiento pagoInternamiento = new PagoInternamiento();
+	ReportePacientesInternados reportePacientes = new ReportePacientesInternados();
+	ReporteInternamientosPagados reporteInternamientos = new ReporteInternamientosPagados();
+	ReporteAtencionesPagadas reporteAtenciones = new ReporteAtencionesPagadas();
 	
 	private JPanel contentPane;
 	private JLabel btnClose;
@@ -70,7 +73,10 @@ public class Menu extends JFrame {
 		internamientoPacientes,
 		atencionMedicinas,
 		pagoMedicinas,
-		pagoInternamiento
+		pagoInternamiento,
+		reportePacientes,
+		reporteInternamientos,
+		reporteAtenciones
 	};
 	private JLabel btnReporteInter;
 	private JLabel label_2;
@@ -348,6 +354,13 @@ public class Menu extends JFrame {
 		contentPane.add(label_1);
 		
 		btnReporteInter = new JLabel("Reporte de internamientos");
+		btnReporteInter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				hideViews();
+				reporteInternamientos.setVisible(true);
+			}
+		});
 		btnReporteInter.setCursor(Constantes.pointer);
 		btnReporteInter.setForeground(Constantes.textgray);
 		btnReporteInter.setFont(Constantes.regularFont);
@@ -365,10 +378,17 @@ public class Menu extends JFrame {
 		contentPane.add(label_3);
 		
 		btnReportePacientes = new JLabel("Reporte de pacientes");
+		btnReportePacientes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				hideViews();
+				reportePacientes.setVisible(true);
+			}
+		});
 		btnReportePacientes.setCursor(Constantes.pointer);
 		btnReportePacientes.setForeground(Constantes.textgray);
 		btnReportePacientes.setFont(Constantes.regularFont);
-		btnReportePacientes.setBounds(50, 508, 136, 19);
+		btnReportePacientes.setBounds(50, 508, 155, 19);
 		contentPane.add(btnReportePacientes);
 		
 		label_5 = new JLabel("");
@@ -377,10 +397,17 @@ public class Menu extends JFrame {
 		contentPane.add(label_5);
 		
 		btnReporteAtencion = new JLabel("Reporte de atenciones");
+		btnReporteAtencion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				hideViews();
+				reporteAtenciones.setVisible(true);
+			}
+		});
 		btnReporteAtencion.setCursor(Constantes.pointer);
 		btnReporteAtencion.setForeground(Constantes.textgray);
 		btnReporteAtencion.setFont(Constantes.regularFont);
-		btnReporteAtencion.setBounds(50, 560, 136, 19);
+		btnReporteAtencion.setBounds(50, 560, 183, 19);
 		contentPane.add(btnReporteAtencion);
 		
 		lblBackground = new JLabel("");

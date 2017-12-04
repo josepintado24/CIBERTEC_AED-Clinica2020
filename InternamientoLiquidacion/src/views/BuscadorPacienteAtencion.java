@@ -27,10 +27,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import constantes.Constantes;
-import controllers.MantenimientoPacientesController;
 import controllers.InternamientoPacientesController;
-import models.Paciente;
+import controllers.MantenimientoPacientesController;
 import models.Internamiento;
+import models.Paciente;
 
 public class BuscadorPacienteAtencion extends JFrame {
 

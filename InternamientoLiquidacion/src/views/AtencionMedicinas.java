@@ -2,10 +2,10 @@ package views;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
@@ -38,12 +37,10 @@ import controllers.AtencionController;
 import controllers.DetalleAtencionController;
 import controllers.MantenimientoMedicinasController;
 import controllers.MantenimientoPacientesController;
+import models.Atencion;
 import models.DetalleAtencion;
 import models.Medicina;
 import models.Paciente;
-import sun.util.resources.cldr.mas.CalendarData_mas_KE;
-import models.Atencion;
-import java.awt.Font;
 
 public class AtencionMedicinas extends JFrame {
 
@@ -585,7 +582,7 @@ public class AtencionMedicinas extends JFrame {
 		lblFechaAtencion = new JLabel("Fec de atenci\u00F3n:");
 		lblFechaAtencion.setForeground(new Color(68, 68, 68));
 		lblFechaAtencion.setFont(Constantes.regularFont);
-		lblFechaAtencion.setBounds(533, 311, 95, 35);
+		lblFechaAtencion.setBounds(533, 311, 112, 35);
 		contentPane.add(lblFechaAtencion);
 		
 		lblEstadoAtencion = new JLabel("Estado:");
@@ -703,21 +700,12 @@ public class AtencionMedicinas extends JFrame {
 		return txtCodPaciente.getText();
 	}
 	
-	private String getNombre(){
-		return txtPaciente.getText();
-	}
-	
 	private String getCodMedicina(){
 		return txtCodMedicina.getText();
 	}
 	
-	private String getHoraIngreso(){
-		return txtPrecio.getText();
-	}
-	
 	private void autogenerateHoraEstado(){
 		date = new Date();
-		DateFormat hourFormat = new SimpleDateFormat("HH:mm");
 		DateFormat dayFormat = new SimpleDateFormat("dd/MM/yyyy");
 		txtFechaAtencion.setText(dayFormat.format(date));
 	}

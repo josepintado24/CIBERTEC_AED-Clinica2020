@@ -1387,6 +1387,7 @@ public class MantenimientoEmpleados extends JFrame {
 		
 		txtPassword = new JPasswordField();
 		txtPassword.setOpaque(false);
+		txtPassword.setEditable(false);
 		txtPassword.setBorder(new EmptyBorder(0, 0, 0, 0));
 		txtPassword.setBounds(516, 428, 184, 34);
 		contentPane.add(txtPassword);

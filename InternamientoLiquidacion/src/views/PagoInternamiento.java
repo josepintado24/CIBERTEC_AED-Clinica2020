@@ -316,6 +316,11 @@ public class PagoInternamiento extends JFrame {
 							txtPrecioCama.getText(),
 							txtTotalPagar.getText()
 						};
+						Internamiento internado = internamiento.buscarPorCodigoPaciente(txtCodPaciente.getText());
+						internado.setFechaSalida("" + txtFechaSalida.getText());
+						internado.setHoraSalida("" + txtHoraSalida.getText());
+						internado.setEstado("Alta");
+						internamiento.agregarInternamiento();
 						mensaje("El pago se ha realizado de manera exitosa.");
 						tabla.addRow(data);
 						infoPago();
