@@ -5,15 +5,33 @@ public class Atencion {
 	private String codAtencion; // Similares a este => "Ate001"
 	private String codPaciente; // Similares a este => "Pac001"
 	private String fechaAtencion;
+	private String codDetalleAtencion;
+	private String estado;
 	private double totalPagar;
-	private int estado;
 	
-	public Atencion(String codAtencion, String codPaciente, String fechaAtencion, double totalPagar, int estado) {
+	public Atencion(String codAtencion, String codPaciente, String fechaAtencion, String codDetalleAtencion, String estado, double totalPagar) {
 		this.codAtencion = codAtencion;
 		this.codPaciente = codPaciente;
 		this.fechaAtencion = fechaAtencion;
-		this.totalPagar = totalPagar;
+		this.codDetalleAtencion = codDetalleAtencion;
 		this.estado = estado;
+		this.totalPagar = totalPagar;
+	}
+
+	public double getTotalPagar() {
+		return totalPagar;
+	}
+
+	public void setTotalPagar(double totalPagar) {
+		this.totalPagar = totalPagar;
+	}
+
+	public String getCodDetalleAtencion() {
+		return codDetalleAtencion;
+	}
+
+	public void setCodDetalleAtencion(String codDetalleAtencion) {
+		this.codDetalleAtencion = codDetalleAtencion;
 	}
 
 	public String getCodAtencion() {
@@ -40,19 +58,12 @@ public class Atencion {
 		this.fechaAtencion = fechaAtencion;
 	}
 
-	public double getTotalPagar() {
-		return totalPagar;
-	}
 
-	public void setTotalPagar(double totalPagar) {
-		this.totalPagar = totalPagar;
-	}
-
-	public int getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(int estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 	

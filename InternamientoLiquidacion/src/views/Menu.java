@@ -8,8 +8,6 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -31,8 +29,10 @@ public class Menu extends JFrame {
 	MantenimientoCamas mantenimientoCamas = new MantenimientoCamas();
 	MantenimientoEmpleados mantenimientoEmpleados = new MantenimientoEmpleados();
 	InternamientoPacientes internamientoPacientes = new InternamientoPacientes();
-	
 	MantenimientoEmpleadosController empleados = new MantenimientoEmpleadosController("empleados.txt");
+	AtencionMedicinas atencionMedicinas = new AtencionMedicinas();
+	PagoMedicinas pagoMedicinas = new PagoMedicinas();
+	PagoInternamiento pagoInternamiento = new PagoInternamiento();
 	
 	private JPanel contentPane;
 	private JLabel btnClose;
@@ -67,8 +67,17 @@ public class Menu extends JFrame {
 		mantenimientoMedicinas,
 		mantenimientoCamas,
 		mantenimientoEmpleados,
-		internamientoPacientes
+		internamientoPacientes,
+		atencionMedicinas,
+		pagoMedicinas,
+		pagoInternamiento
 	};
+	private JLabel btnReporteInter;
+	private JLabel label_2;
+	private JLabel label_3;
+	private JLabel btnReportePacientes;
+	private JLabel label_5;
+	private JLabel btnReporteAtencion;
 	
 	public void hideViews(){
 		for(int i = 0; i < views.length; i++){
@@ -140,26 +149,40 @@ public class Menu extends JFrame {
 		
 		arrowPagoMedicina = new JLabel("");
 		arrowPagoMedicina.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
-		arrowPagoMedicina.setBounds(44, 418, 10, 14);
+		arrowPagoMedicina.setBounds(36, 418, 10, 14);
 		contentPane.add(arrowPagoMedicina);
 		
 		btnPagoMedicinas = new JLabel("Pago de medicinas");
+		btnPagoMedicinas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				hideViews();
+				pagoMedicinas.setVisible(true);
+			}
+		});
 		btnPagoMedicinas.setForeground(Constantes.textgray);
 		btnPagoMedicinas.setCursor(Constantes.pointer);
 		btnPagoMedicinas.setFont(Constantes.regularFont);
-		btnPagoMedicinas.setBounds(58, 417, 136, 19);
+		btnPagoMedicinas.setBounds(50, 417, 136, 19);
 		contentPane.add(btnPagoMedicinas);
 		
 		arrowPagoDias = new JLabel("");
 		arrowPagoDias.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
-		arrowPagoDias.setBounds(44, 444, 10, 14);
+		arrowPagoDias.setBounds(36, 444, 10, 14);
 		contentPane.add(arrowPagoDias);
 		
 		btnPagoDias = new JLabel("Pago por d\u00EDas de internamiento");
+		btnPagoDias.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				hideViews();
+				pagoInternamiento.setVisible(true);
+			}
+		});
 		btnPagoDias.setForeground(Constantes.textgray);
 		btnPagoDias.setCursor(Constantes.pointer);
 		btnPagoDias.setFont(Constantes.regularFont);
-		btnPagoDias.setBounds(58, 443, 204, 19);
+		btnPagoDias.setBounds(50, 443, 204, 19);
 		contentPane.add(btnPagoDias);
 		
 		lblAtencion = new JLabel("Atenci\u00F3n");
@@ -174,6 +197,13 @@ public class Menu extends JFrame {
 		contentPane.add(arrowAtMedicina);
 		
 		btnAtMedicinas = new JLabel("Medicinas solicitadas");
+		btnAtMedicinas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				hideViews();
+				atencionMedicinas.setVisible(true);
+			}
+		});
 		btnAtMedicinas.setForeground(Constantes.textgray);
 		btnAtMedicinas.setCursor(Constantes.pointer);
 		btnAtMedicinas.setFont(Constantes.regularFont);
@@ -295,7 +325,7 @@ public class Menu extends JFrame {
 		});
 		btnCerrarSesion.setForeground(new Color(59, 138, 191));
 		btnCerrarSesion.setFont(Constantes.boldFont);
-		btnCerrarSesion.setBounds(26, 518, 143, 19);
+		btnCerrarSesion.setBounds(26, 600, 143, 19);
 		contentPane.add(btnCerrarSesion);
 		
 		btnMantEmpleados = new JLabel("Mant. de empleados");
@@ -306,7 +336,7 @@ public class Menu extends JFrame {
 				mantenimientoEmpleados.setVisible(true);
 			}
 		});
-		btnMantEmpleados.setForeground(new Color(68, 68, 68));
+		btnMantEmpleados.setForeground(Constantes.textgray);
 		btnMantEmpleados.setFont(Constantes.regularFont);
 		btnMantEmpleados.setCursor(Constantes.pointer);
 		btnMantEmpleados.setBounds(58, 208, 136, 19);
@@ -316,6 +346,42 @@ public class Menu extends JFrame {
 		label_1.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
 		label_1.setBounds(44, 209, 10, 14);
 		contentPane.add(label_1);
+		
+		btnReporteInter = new JLabel("Reporte de internamientos");
+		btnReporteInter.setCursor(Constantes.pointer);
+		btnReporteInter.setForeground(Constantes.textgray);
+		btnReporteInter.setFont(Constantes.regularFont);
+		btnReporteInter.setBounds(50, 534, 204, 19);
+		contentPane.add(btnReporteInter);
+		
+		label_2 = new JLabel("");
+		label_2.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
+		label_2.setBounds(36, 535, 10, 14);
+		contentPane.add(label_2);
+		
+		label_3 = new JLabel("");
+		label_3.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
+		label_3.setBounds(36, 509, 10, 14);
+		contentPane.add(label_3);
+		
+		btnReportePacientes = new JLabel("Reporte de pacientes");
+		btnReportePacientes.setCursor(Constantes.pointer);
+		btnReportePacientes.setForeground(Constantes.textgray);
+		btnReportePacientes.setFont(Constantes.regularFont);
+		btnReportePacientes.setBounds(50, 508, 136, 19);
+		contentPane.add(btnReportePacientes);
+		
+		label_5 = new JLabel("");
+		label_5.setIcon(new ImageIcon(Menu.class.getResource("/views/images/arrow-menu.png")));
+		label_5.setBounds(36, 561, 10, 14);
+		contentPane.add(label_5);
+		
+		btnReporteAtencion = new JLabel("Reporte de atenciones");
+		btnReporteAtencion.setCursor(Constantes.pointer);
+		btnReporteAtencion.setForeground(Constantes.textgray);
+		btnReporteAtencion.setFont(Constantes.regularFont);
+		btnReporteAtencion.setBounds(50, 560, 136, 19);
+		contentPane.add(btnReporteAtencion);
 		
 		lblBackground = new JLabel("");
 		lblBackground.setBackground(Color.WHITE);
@@ -341,5 +407,4 @@ public class Menu extends JFrame {
 	private void mensaje(String msg){
 		JOptionPane.showMessageDialog(null, msg);
 	}
-	
 }

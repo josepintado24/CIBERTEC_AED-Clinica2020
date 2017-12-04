@@ -7,6 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -32,9 +34,6 @@ import javax.swing.table.DefaultTableModel;
 import constantes.Constantes;
 import controllers.MantenimientoCamasController;
 import models.Cama;
-import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class MantenimientoCamas extends JFrame {
 

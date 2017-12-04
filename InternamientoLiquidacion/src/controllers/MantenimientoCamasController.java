@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
 import models.Cama;
-import models.Paciente;
 
 public class MantenimientoCamasController {
 
@@ -17,7 +17,7 @@ public class MantenimientoCamasController {
 	public MantenimientoCamasController(String file){
 		cama = new ArrayList<Cama>();
 		this.file = file;
-		cargarPacientes();
+		cargarCamas();
 		busquedaCamaEstado = new ArrayList<Cama>();
 	}
 	
@@ -80,7 +80,7 @@ public class MantenimientoCamasController {
 		}
 	}
 	
-	public void cargarPacientes(){
+	public void cargarCamas(){
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String read, codigo, estado;

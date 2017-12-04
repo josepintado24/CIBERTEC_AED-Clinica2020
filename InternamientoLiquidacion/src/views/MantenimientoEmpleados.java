@@ -2,11 +2,14 @@ package views;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -31,14 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import constantes.Constantes;
 import controllers.MantenimientoEmpleadosController;
-import models.Cama;
 import models.Empleado;
-import models.Paciente;
-
-import java.awt.Font;
-import javax.swing.JPasswordField;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class MantenimientoEmpleados extends JFrame {
 

@@ -1,3 +1,4 @@
 CAM001#15.4#Ocupado
-CAM003#50.0#Libre
-CAM004#78.5#Libre
+CAM003#50.0#Ocupado
+CAM004#78.5#Ocupado
+CAM005#35.5#Ocupado

@@ -2,7 +2,6 @@ package views;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -23,27 +22,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import constantes.Constantes;
 import controllers.InternamientoPacientesController;
+import controllers.MantenimientoCamasController;
+import models.Cama;
 import models.Internamiento;
-import models.Paciente;
-import javax.swing.JTextArea;
 
 public class InternamientoPacientes extends JFrame {
 
 	Constantes constantes = new Constantes();
 	InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
+	MantenimientoCamasController camas = new MantenimientoCamasController("camas.txt");
 	BuscadorPaciente buscadorPaciente = new BuscadorPaciente();
 	BuscadorCama buscadorCama = new BuscadorCama();
 	
@@ -65,9 +63,9 @@ public class InternamientoPacientes extends JFrame {
 	private JLabel lblCodCama;
 	private JLabel lblInputCodCama;
 	private JLabel btnIngresarConfirm;
-	private JLabel btnEliminarConfirm;
+	private JLabel btnCancelarConfirm;
 	private JLabel lblIngresarConfirm;
-	private JLabel lblEliminarConfirm;
+	private JLabel lblCancelarConfirm;
 	private JTextField txtCodInternamiento;
 	private JLabel lblInputCodInternamiento;
 	private JTextField txtCodPaciente;
@@ -156,7 +154,7 @@ public class InternamientoPacientes extends JFrame {
 		
 		txtCodInternamiento = new JTextField();
 		txtCodInternamiento.setOpaque(false);
-		txtCodInternamiento.setForeground(new Color(68, 68, 68));
+		txtCodInternamiento.setForeground(Constantes.textgray);
 		txtCodInternamiento.setFont(Constantes.regularFont);
 		txtCodInternamiento.setEditable(false);
 		txtCodInternamiento.setColumns(10);
@@ -240,25 +238,25 @@ public class InternamientoPacientes extends JFrame {
 		contentPane.add(lblAviso);
 		
 		lblCodInternamiento = new JLabel("C\u00F3digo de Int.:");
-		lblCodInternamiento.setForeground(new Color(68, 68, 68));
+		lblCodInternamiento.setForeground(Constantes.textgray);
 		lblCodInternamiento.setFont(Constantes.regularFont);
 		lblCodInternamiento.setBounds(25, 218, 92, 35);
 		contentPane.add(lblCodInternamiento);
 		
 		lblCodPaciente = new JLabel("C\u00F3digo de Pac.:");
-		lblCodPaciente.setForeground(new Color(68, 68, 68));
+		lblCodPaciente.setForeground(Constantes.textgray);
 		lblCodPaciente.setFont(Constantes.regularFont);
 		lblCodPaciente.setBounds(533, 218, 112, 35);
 		contentPane.add(lblCodPaciente);
 		
 		lblNombre = new JLabel("Nombre:");
-		lblNombre.setForeground(new Color(68, 68, 68));
+		lblNombre.setForeground(Constantes.textgray);
 		lblNombre.setFont(Constantes.regularFont);
 		lblNombre.setBounds(25, 264, 87, 35);
 		contentPane.add(lblNombre);
 		
 		lblFechaIngreso = new JLabel("Fec de ingreso:");
-		lblFechaIngreso.setForeground(new Color(68, 68, 68));
+		lblFechaIngreso.setForeground(Constantes.textgray);
 		lblFechaIngreso.setFont(Constantes.regularFont);
 		lblFechaIngreso.setBounds(25, 311, 100, 35);
 		contentPane.add(lblFechaIngreso);
@@ -279,7 +277,7 @@ public class InternamientoPacientes extends JFrame {
 		lblIngresarConfirm.setCursor(Constantes.pointer);
 		lblIngresarConfirm.setForeground(Color.WHITE);
 		lblIngresarConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIngresarConfirm.setBounds(931, 359, 100, 34);
+		lblIngresarConfirm.setBounds(931, 360, 100, 34);
 		lblIngresarConfirm.setVisible(true);
 		contentPane.add(lblIngresarConfirm);
 		
@@ -297,17 +295,26 @@ public class InternamientoPacientes extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de ingresar los registros de un nuevo internamiento?", "Confirmar ingreso de datos", JOptionPane.OK_CANCEL_OPTION);
-					if(option == 0){
-						Internamiento newInternamiento = new Internamiento(getCodInternamiento(), getCodPaciente(), getNombre(), getCodCama(), getFechaIngreso(), getHoraIngreso(), "---", "---", getEstado());
-						internamiento.adicionar(newInternamiento);
-						internamiento.agregarInternamiento();
-						
-						mensaje("Los nuevos registros han sido grabados correctamente.");
-						resetFields();
-						autogenerateCode();
-						autogenerateHoraEstado();
-						infoInternamiento();
+					if(getCodPaciente().contentEquals("") && getCodCama().contentEquals("")){
+						mensaje("Falta ingresar uno o más datos.");
+					}
+					else {
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de ingresar los registros de un nuevo internamiento?", "Confirmar ingreso de datos", JOptionPane.OK_CANCEL_OPTION);
+						if(option == 0){
+							Internamiento newInternamiento = new Internamiento(getCodInternamiento(), getCodPaciente(), getNombre(), getCodCama(), getFechaIngreso(), getHoraIngreso(), "---", "---", getEstado());
+							internamiento.adicionar(newInternamiento);
+							internamiento.agregarInternamiento();
+							
+							Cama modCama = camas.buscarPorCodigo(txtCodCama.getText());
+							modCama.setEstado("Ocupado");
+							camas.agregarCamas();
+							
+							mensaje("Los nuevos registros han sido grabados correctamente.");
+							resetFields();
+							autogenerateCode();
+							autogenerateHoraEstado();
+							infoInternamiento();
+						}
 					}
 				}
 				catch(Exception er){
@@ -316,54 +323,43 @@ public class InternamientoPacientes extends JFrame {
 			}
 		});
 		btnIngresarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnIngresarConfirm.setBounds(931, 358, 100, 35);
+		btnIngresarConfirm.setBounds(931, 359, 100, 35);
 		contentPane.add(btnIngresarConfirm);
 		
-		lblEliminarConfirm = new JLabel("Eliminar");
-		lblEliminarConfirm.setFont(Constantes.regularFont);
-		lblEliminarConfirm.setCursor(Constantes.pointer);
-		lblEliminarConfirm.setForeground(Color.WHITE);
-		lblEliminarConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEliminarConfirm.setBounds(931, 359, 100, 34);
-		lblEliminarConfirm.setVisible(false);
-		contentPane.add(lblEliminarConfirm);
+		lblCancelarConfirm = new JLabel("Cancelar");
+		lblCancelarConfirm.setFont(Constantes.regularFont);
+		lblCancelarConfirm.setCursor(Constantes.pointer);
+		lblCancelarConfirm.setForeground(Color.WHITE);
+		lblCancelarConfirm.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCancelarConfirm.setBounds(821, 360, 100, 34);
+		lblCancelarConfirm.setVisible(true);
+		contentPane.add(lblCancelarConfirm);
 		
-		btnEliminarConfirm = new JLabel("");
-		btnEliminarConfirm.setVisible(false);
-		btnEliminarConfirm.addMouseListener(new MouseAdapter() {
+		btnCancelarConfirm = new JLabel("");
+		btnCancelarConfirm.setVisible(true);
+		btnCancelarConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnIngresarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login-hover.png")));
+				btnCancelarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login-hover.png")));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnIngresarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
+				btnCancelarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String codigo = txtCodInternamiento.getText();
-				Internamiento dropInternamiento = internamiento.buscarPorCodigoInternamiento(codigo);
-				if(dropInternamiento != null){
-					int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar los registros de este internamiento?", "Confirmar eliminación", JOptionPane.OK_CANCEL_OPTION);
-					if(option == 0){
-						internamiento.eliminarInternamiento(dropInternamiento);
-						internamiento.agregarInternamiento();
-						resetFields();
-						mensaje("Los registros de este paciente han sido eliminados correctamente.");
-					}
-				}
-				else {
-					mensaje("No has ingresado pacientes para eliminar.");
-				}
+				int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de cancelar?", "Confirmar cancelación", JOptionPane.OK_CANCEL_OPTION);
+				if(option == 0) resetFields();
+				else return;
 			}
 		});
-		btnEliminarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
-		btnEliminarConfirm.setBounds(931, 358, 100, 35);
-		contentPane.add(btnEliminarConfirm);
+		btnCancelarConfirm.setIcon(new ImageIcon(InternamientoPacientes.class.getResource("/views/images/btn-login.png")));
+		btnCancelarConfirm.setBounds(821, 359, 100, 35);
+		contentPane.add(btnCancelarConfirm);
 		
 		txtCodPaciente = new JTextField();
 		txtCodPaciente.setOpaque(false);
-		txtCodPaciente.setForeground(new Color(68, 68, 68));
+		txtCodPaciente.setForeground(Constantes.textgray);
 		txtCodPaciente.setFont(Constantes.regularFont);
 		txtCodPaciente.setEditable(false);
 		txtCodPaciente.setColumns(10);
@@ -466,7 +462,7 @@ public class InternamientoPacientes extends JFrame {
 		
 		txtNombre = new JTextField();
 		txtNombre.setOpaque(false);
-		txtNombre.setForeground(new Color(68, 68, 68));
+		txtNombre.setForeground(Constantes.textgray);
 		txtNombre.setFont(Constantes.regularFont);
 		txtNombre.setEditable(false);
 		txtNombre.setColumns(10);
@@ -481,14 +477,14 @@ public class InternamientoPacientes extends JFrame {
 		contentPane.add(lblInputNombre);
 		
 		lblCodCama = new JLabel("C\u00F3digo de Cama:");
-		lblCodCama.setForeground(new Color(68, 68, 68));
+		lblCodCama.setForeground(Constantes.textgray);
 		lblCodCama.setFont(Constantes.regularFont);
 		lblCodCama.setBounds(533, 264, 112, 35);
 		contentPane.add(lblCodCama);
 		
 		txtCodCama = new JTextField();
 		txtCodCama.setOpaque(false);
-		txtCodCama.setForeground(new Color(68, 68, 68));
+		txtCodCama.setForeground(Constantes.textgray);
 		txtCodCama.setFont(Constantes.regularFont);
 		txtCodCama.setEditable(false);
 		txtCodCama.setColumns(10);
@@ -532,14 +528,14 @@ public class InternamientoPacientes extends JFrame {
 		contentPane.add(btnSelectCodCama);
 		
 		lblHoraIngreso = new JLabel("Hora de ingreso:");
-		lblHoraIngreso.setForeground(new Color(68, 68, 68));
+		lblHoraIngreso.setForeground(Constantes.textgray);
 		lblHoraIngreso.setFont(Constantes.regularFont);
 		lblHoraIngreso.setBounds(265, 311, 112, 35);
 		contentPane.add(lblHoraIngreso);
 		
 		txtFechaIngreso = new JTextField();
 		txtFechaIngreso.setOpaque(false);
-		txtFechaIngreso.setForeground(new Color(68, 68, 68));
+		txtFechaIngreso.setForeground(Constantes.textgray);
 		txtFechaIngreso.setFont(Constantes.regularFont);
 		txtFechaIngreso.setEditable(false);
 		txtFechaIngreso.setColumns(10);
@@ -555,7 +551,7 @@ public class InternamientoPacientes extends JFrame {
 		
 		txtHoraIngreso = new JTextField();
 		txtHoraIngreso.setOpaque(false);
-		txtHoraIngreso.setForeground(new Color(68, 68, 68));
+		txtHoraIngreso.setForeground(Constantes.textgray);
 		txtHoraIngreso.setFont(Constantes.regularFont);
 		txtHoraIngreso.setEditable(false);
 		txtHoraIngreso.setColumns(10);
@@ -571,7 +567,7 @@ public class InternamientoPacientes extends JFrame {
 		
 		txtEstado = new JTextField("Alojado");
 		txtEstado.setOpaque(false);
-		txtEstado.setForeground(new Color(68, 68, 68));
+		txtEstado.setForeground(Constantes.textgray);
 		txtEstado.setFont(Constantes.regularFont);
 		txtEstado.setEditable(false);
 		txtEstado.setColumns(10);
@@ -580,20 +576,20 @@ public class InternamientoPacientes extends JFrame {
 		contentPane.add(txtEstado);
 		
 		lblFechaSalida = new JLabel("Fec de salida:");
-		lblFechaSalida.setForeground(new Color(68, 68, 68));
+		lblFechaSalida.setForeground(Constantes.textgray);
 		lblFechaSalida.setFont(Constantes.regularFont);
 		lblFechaSalida.setBounds(533, 311, 87, 35);
 		contentPane.add(lblFechaSalida);
 		
 		lblHoraSalida = new JLabel("Hora de salida:");
-		lblHoraSalida.setForeground(new Color(68, 68, 68));
+		lblHoraSalida.setForeground(Constantes.textgray);
 		lblHoraSalida.setFont(Constantes.regularFont);
 		lblHoraSalida.setBounds(798, 311, 100, 35);
 		contentPane.add(lblHoraSalida);
 		
 		txtFechaSalida = new JTextField();
 		txtFechaSalida.setOpaque(false);
-		txtFechaSalida.setForeground(new Color(68, 68, 68));
+		txtFechaSalida.setForeground(Constantes.textgray);
 		txtFechaSalida.setFont(Constantes.regularFont);
 		txtFechaSalida.setEnabled(false);
 		txtFechaSalida.setEditable(false);
@@ -610,7 +606,7 @@ public class InternamientoPacientes extends JFrame {
 		
 		txtHoraSalida = new JTextField();
 		txtHoraSalida.setOpaque(false);
-		txtHoraSalida.setForeground(new Color(68, 68, 68));
+		txtHoraSalida.setForeground(Constantes.textgray);
 		txtHoraSalida.setFont(Constantes.regularFont);
 		txtHoraSalida.setEnabled(false);
 		txtHoraSalida.setEditable(false);
@@ -626,7 +622,7 @@ public class InternamientoPacientes extends JFrame {
 		contentPane.add(lblInputHoraSalida);
 		
 		lblEstado = new JLabel("Estado:");
-		lblEstado.setForeground(new Color(68, 68, 68));
+		lblEstado.setForeground(Constantes.textgray);
 		lblEstado.setFont(Constantes.regularFont);
 		lblEstado.setBounds(24, 358, 87, 35);
 		contentPane.add(lblEstado);
@@ -681,11 +677,8 @@ public class InternamientoPacientes extends JFrame {
 		txtCodPaciente.setText("");
 		txtNombre.setText("");
 		txtCodCama.setText("");
-		txtFechaIngreso.setText("");
-		txtHoraIngreso.setText("");
 		txtFechaSalida.setText("");
 		txtHoraSalida.setText("");
-		txtEstado.setText("");
 	}
 	
 	private void changeOptionActive(String optionActive){
@@ -696,8 +689,8 @@ public class InternamientoPacientes extends JFrame {
 	private void hideButtons(){
 		lblIngresarConfirm.setVisible(false);
 		btnIngresarConfirm.setVisible(false);
-		lblEliminarConfirm.setVisible(false);
-		btnEliminarConfirm.setVisible(false);
+		lblCancelarConfirm.setVisible(false);
+		btnCancelarConfirm.setVisible(false);
 	}
 	
 	private String getCodInternamiento(){
@@ -753,6 +746,7 @@ public class InternamientoPacientes extends JFrame {
 	}
 	
 	private void infoInternamiento(){
+		txtInfo.setText("");
 		imprimir("Código de internamiento: " + getCodInternamiento());
 		imprimir("Código de paciente: " + getCodPaciente());
 		imprimir("Nombre de paciente: " + getNombre());

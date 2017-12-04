@@ -6,8 +6,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import models.Paciente;
 
 public class MantenimientoPacientesController {

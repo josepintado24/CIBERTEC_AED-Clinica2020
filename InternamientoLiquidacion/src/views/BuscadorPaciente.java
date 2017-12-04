@@ -1,38 +1,41 @@
 package views;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import java.awt.Font;
 import java.awt.Color;
-import javax.swing.JTextPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
-
-import constantes.Constantes;
-import models.Paciente;
-import controllers.MantenimientoPacientesController;
-
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
+import constantes.Constantes;
+import controllers.MantenimientoPacientesController;
+import controllers.InternamientoPacientesController;
+import models.Paciente;
+import models.Internamiento;
 
 public class BuscadorPaciente extends JFrame {
 
 	MantenimientoPacientesController paciente = new MantenimientoPacientesController("pacientes.txt");
+	InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
 	
 	private JPanel contentPane;
 	private JLabel btnClose;
@@ -66,6 +69,8 @@ public class BuscadorPaciente extends JFrame {
 	private JTable table;
 	private JTextField textField;
 	private JTextField txtNombre;
+	private JTextField txtCodigo;
+	private JTextField txtApellidos;
 
 	/**
 	 * Launch the application.
@@ -87,6 +92,34 @@ public class BuscadorPaciente extends JFrame {
 	 * Create the frame.
 	 */
 	public BuscadorPaciente() {
+		
+		this.addWindowListener(new WindowListener() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+//				MantenimientoPacientesController paciente = new MantenimientoPacientesController("pacientes.txt");
+//				InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
+				listarPacientes();
+			}
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			@Override
+			public void windowClosing(WindowEvent e) {
+			}
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
+		
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 450);
@@ -423,6 +456,9 @@ public class BuscadorPaciente extends JFrame {
 			}
 			void mostrarDatos(Paciente data){
 				txtPaciente.setText(data.getNombres() + " " + data.getApellidos());
+				txtCodigo.setText(data.getCodPaciente());
+				txtNombre.setText(data.getNombres());
+				txtApellidos.setText(data.getApellidos());
 			}
 			public void mouseClicked(MouseEvent e) {
 				if(btnBuscar.isEnabled()){
@@ -526,8 +562,17 @@ public class BuscadorPaciente extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(!txtPaciente.getText().contentEquals("")){
-					sendCodPaciente();
-					dispose();
+					String code = txtCodigo.getText();
+					Internamiento internado = internamiento.buscarPorCodigoPaciente(code);
+					if(internado != null){
+						mensaje("El paciente seleccionado ya se encuentra internado.");
+					}
+					else {
+						sendCodPaciente();
+						sendNombrePaciente();
+						sendApellidoPaciente();
+						dispose();
+					}
 				}
 				else {
 					mensaje("Asegurese de seleccionar un código de paciente por favor.");
@@ -556,6 +601,9 @@ public class BuscadorPaciente extends JFrame {
 				String code = table.getValueAt(rowIndex, 0).toString();
 				Paciente getPaciente = paciente.buscarPorCodigo(code);
 				txtPaciente.setText(getPaciente.getNombres() + " " + getPaciente.getApellidos());
+				txtCodigo.setText(getPaciente.getCodPaciente());
+				txtNombre.setText(getPaciente.getNombres());
+				txtApellidos.setText(getPaciente.getApellidos());
 			}
 		});
 		table.setFillsViewportHeight(true);
@@ -575,15 +623,28 @@ public class BuscadorPaciente extends JFrame {
 		lblBackground.setBounds(0, 0, 650, 450);
 		contentPane.add(lblBackground);
 		
+		txtCodigo = new JTextField();
+		txtCodigo.setVisible(false);
+		
 		txtNombre = new JTextField();
 		txtNombre.setVisible(false);
-		txtNombre.setText("sfsdf");
 		txtNombre.setForeground(new Color(68, 68, 68));
 		txtNombre.setFont(new Font("Josefin Sans", Font.PLAIN, 14));
 		txtNombre.setColumns(10);
 		txtNombre.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtNombre.setBounds(0, 0, 251, 35);
+		txtNombre.setBounds(0, 0, 50, 35);
 		contentPane.add(txtNombre);
+		txtCodigo.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtCodigo.setBounds(53, 0, 65, 35);
+		contentPane.add(txtCodigo);
+		txtCodigo.setColumns(10);
+		
+		txtApellidos = new JTextField();
+		txtApellidos.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtApellidos.setBounds(81, 0, 50, 35);
+		txtApellidos.setVisible(false);
+		contentPane.add(txtApellidos);
+		txtApellidos.setColumns(10);
 		setUndecorated(true);
 		setLocationRelativeTo(null);
 		
@@ -606,15 +667,6 @@ public class BuscadorPaciente extends JFrame {
 			return 0;
 	}
 	
-	private void autogenerateCode(){
-		int lastCode = paciente.obtenerUltimoCodigo() + 1;
-		String newCode = "PAC";
-		if(Integer.toString(lastCode).length() == 1) newCode += "00" + lastCode;
-		if(Integer.toString(lastCode).length() == 2) newCode += "0" + lastCode;
-		if(Integer.toString(lastCode).length() == 3) newCode += "" + lastCode;
-		txtIngresar.setText(newCode);
-	}
-	
 	private void mensaje(String msg){
 		JOptionPane.showMessageDialog(null, msg);
 	}
@@ -634,11 +686,15 @@ public class BuscadorPaciente extends JFrame {
 	}
 	
 	public String sendCodPaciente(){
-		return txtPaciente.getText();
+		return txtCodigo.getText();
 	}
 	
 	public String sendNombrePaciente(){
 		return txtNombre.getText();
+	}
+	
+	public String sendApellidoPaciente(){
+		return txtApellidos.getText();
 	}
 	
 }

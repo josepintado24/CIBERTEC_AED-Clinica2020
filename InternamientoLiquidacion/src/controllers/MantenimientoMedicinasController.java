@@ -10,11 +10,14 @@ import models.Medicina;
 public class MantenimientoMedicinasController {
 
 	private ArrayList<Medicina> medicina;
+	private ArrayList<Medicina> busquedaMedicina;
 	private String file;
 	
 	public MantenimientoMedicinasController(String file){
 		medicina = new ArrayList<Medicina>();
+		busquedaMedicina = new ArrayList<Medicina>();
 		this.file = file;
+		cargarMedicinas();
 	}
 	
 	public int tamanio(){
@@ -104,7 +107,7 @@ public class MantenimientoMedicinasController {
 			br.close();
 		}
 		catch(Exception err){
-			System.out.println("error" + err);
+			System.out.println("error: " + err);
 		}
 	}
 	
@@ -117,6 +120,38 @@ public class MantenimientoMedicinasController {
 			}
 		}
 		return mayor;
+	}
+	
+	public String removeAcent(String input) {
+	    String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+	    String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+	    String output = input;
+	    for(int i = 0; i < original.length(); i++) {
+	        output = output.replace(original.charAt(i), ascii.charAt(i));
+	    }
+	    return output;
+	}
+	
+	public ArrayList<Medicina> listLaboratorio(String laboratorio){
+		busquedaMedicina.clear();
+		for(int i = 0; i < tamanio(); i++){
+			String term = removeAcent(obtener(i).getLaboratorio());
+			if(term.toLowerCase().startsWith(laboratorio) || term.startsWith(laboratorio) || term.toUpperCase().startsWith(laboratorio)){
+				busquedaMedicina.add(obtener(i));
+			}
+		}
+		return busquedaMedicina;
+	}
+	
+	public ArrayList<Medicina> listNombre(String nombre){
+		busquedaMedicina.clear();
+		for(int i = 0; i < tamanio(); i++){
+			String term = removeAcent(obtener(i).getNombre());
+			if(term.toLowerCase().startsWith(nombre) || term.startsWith(nombre) || term.toUpperCase().startsWith(nombre)){
+				busquedaMedicina.add(obtener(i));
+			}
+		}
+		return busquedaMedicina;
 	}
 	
 }

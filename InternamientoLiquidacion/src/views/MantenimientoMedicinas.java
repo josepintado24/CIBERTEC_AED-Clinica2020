@@ -7,8 +7,12 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -31,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import constantes.Constantes;
 import controllers.MantenimientoMedicinasController;
 import models.Medicina;
+import models.Paciente;
 
 public class MantenimientoMedicinas extends JFrame {
 
@@ -536,6 +541,88 @@ public class MantenimientoMedicinas extends JFrame {
 		contentPane.add(btnEliminar);
 		
 		txtIngresar = new JTextField();
+		txtIngresar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0){
+				int cboSelect = getCboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un término de búsqueda.");
+				}
+				else {
+					if(cboSelect == 1){
+						if(txtIngresar.getText().length() == 6){
+							arg0.consume();
+						}
+					}
+					if(cboSelect == 3){
+						if(txtIngresar.getText().length() == 8){
+							arg0.consume();
+						}
+					}
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				int cboSelect = getCboBuscarPor();
+				if(cboSelect == 0){
+					mensaje("Asegurese de haber seleccionado un filtro e ingresado un término de búsqueda.");
+				}
+				else {
+					String term = getBusquedaCodigo();
+					if(cboSelect == 1){
+						return;
+					}
+					if(cboSelect == 2){
+						if(term.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s+]{0,25}") || term.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ+]{0,25}")){
+							ArrayList<Medicina> buscarMedicina = medicina.listLaboratorio(term);
+							if(buscarMedicina != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarMedicina.size(); i++){
+									Object[] data = {
+										buscarMedicina.get(i).getCodMedicina(),
+										buscarMedicina.get(i).getNombre(),
+										buscarMedicina.get(i).getLaboratorio(),
+										buscarMedicina.get(i).getPrecio(),
+										buscarMedicina.get(i).getPrecio()
+									};
+									tabla.addRow(data);
+								}
+							}
+							else {
+								mensaje("No hay registros de medicinas con este nombre de laboratorio.");
+							}
+						}
+						else {
+							mensaje("El laboratorio no ha sido ingresado en un formato correcto.");
+						}
+					}
+					if(cboSelect == 3){
+						if(term.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s+]{0,25}") || term.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ+]{0,25}")){
+							ArrayList<Medicina> buscarMedicina = medicina.listNombre(term);
+							if(buscarMedicina != null){
+								tabla.setRowCount(0);
+								for(int i = 0; i < buscarMedicina.size(); i++){
+									Object[] data = {
+										buscarMedicina.get(i).getCodMedicina(),
+										buscarMedicina.get(i).getNombre(),
+										buscarMedicina.get(i).getLaboratorio(),
+										buscarMedicina.get(i).getPrecio(),
+										buscarMedicina.get(i).getPrecio()
+									};
+									tabla.addRow(data);
+								}
+							}
+							else {
+								mensaje("No hay registros de pacientes con este nombre.");
+							}
+						}
+						else {
+							mensaje("El nombre no ha sido ingresado en un formato correcto.\nIngrese sólo letras.");
+						}
+					}
+				}
+			}
+		});
 		txtIngresar.setEnabled(false);
 		txtIngresar.setEditable(false);
 		txtIngresar.setOpaque(false);
@@ -836,7 +923,20 @@ public class MantenimientoMedicinas extends JFrame {
 		scrollPane.setViewportView(tblTabla);
 		
 		table = new JTable();
-		table.setEnabled(false);
+		table.setEnabled(true);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int rowIndex = table.getSelectedRow();
+				String code = table.getValueAt(rowIndex, 0).toString();
+				Medicina getMedicina = medicina.buscarPorCodigo(code);
+				txtCodigo.setText(getMedicina.getCodMedicina());
+				txtNombre.setText(getMedicina.getNombre());
+				txtLaboratorio.setText(getMedicina.getLaboratorio());
+				txtPrecio.setText("" + getMedicina.getPrecio());
+				txtStock.setText("" + getMedicina.getStock());
+			}
+		});
 		table.setForeground(Constantes.textgray);
 		table.setFont(Constantes.regularFont);
 		table.setRowHeight(30);
@@ -1025,7 +1125,6 @@ public class MantenimientoMedicinas extends JFrame {
         setLocation(x, y);
         setVisible(true);
         
-        medicina.cargarMedicinas();
         listarMedicinas();
 	}
 	

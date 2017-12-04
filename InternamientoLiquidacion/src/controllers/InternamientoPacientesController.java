@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import models.Internamiento;
-import models.Paciente;
 
 public class InternamientoPacientesController {
 
