@@ -202,7 +202,6 @@ public class PagoMedicinas extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				changeOptionActive("Pagar");
 				resetFields();
-				autogenerateHoraEstado();
 				hideButtons();
 			}
 		});
@@ -290,10 +289,10 @@ public class PagoMedicinas extends JFrame {
 						imprimir("CLÍNICA JUAN PABLO II");
 						imprimir("Detalle de pago de medicinas:");
 						imprimir("------------------------------------------------");
-						imprimir("Código de atención: " + txtCodAtencion.getText());
-						imprimir("Codigo de paciente: " + txtCodPaciente.getText());
+						imprimir("Código de atención: " + getAtencion.getCodAtencion());
+						imprimir("Codigo de paciente: " + getAtencion.getCodPaciente());
 						imprimir("Paciente: " + getPaciente.getNombres() + " " + getPaciente.getApellidos());
-						imprimir("Estado: " + txtEstado.getText());
+						imprimir("Estado: " + getAtencion.getEstado());
 						imprimir("------------------------------------------------");
 						imprimir("Detalle de medicinas: ");
 						imprimir("------------------------------------------------");
@@ -301,12 +300,14 @@ public class PagoMedicinas extends JFrame {
 							Medicina getMedicina = medicina.buscarPorCodigo(lista.get(i).getCodMedicina());
 							imprimir("Medicina: " + (i+1) + ":");
 							imprimir("Código de medicina: " + getMedicina.getCodMedicina());
+							imprimir("Nombre de medicina: " + getMedicina.getNombre());
 							imprimir("Precio unitario: " + getMedicina.getPrecio());
 							imprimir("Cantidad: " + lista.get(i).getCantidad());
 							imprimir("Precio por medicina: " + lista.get(i).getTotalPagar());
 							imprimir("------------------------------------------------");
 						}
 						imprimir("Total a pagar: " + txtTotalPagar.getText());
+						buscadorAtencion = new BuscadorAtencion();
 					}
 				}
 				catch(Exception er){
@@ -398,8 +399,6 @@ public class PagoMedicinas extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				buscadorAtencion.setVisible(true);
-//				String codPaciente = buscadorPaciente.sendCodPaciente();
-//				txtCodAtencion.setText(codPaciente);
 			}
 		});
 		btnSelectCodPaciente.setIcon(new ImageIcon(PagoMedicinas.class.getResource("/views/images/btn-login.png")));
@@ -531,14 +530,8 @@ public class PagoMedicinas extends JFrame {
 		txtCodAtencion.setText("");
 		txtCodPaciente.setText("");
 		txtPaciente.setText("");
-//		txtFechaIngreso.setText("");
-//		txtHoraIngreso.setText("");
-//		txtFechaSalida.setText("");
-//		txtHoraSalida.setText("");
 		txtEstado.setText("");
-//		txtDiasInt.setText("");
-//		txtPrecioCama.setText("S/. ");
-//		txtTotalPagar.setText("S/. ");
+		txtTotalPagar.setText("S/. ");
 	}
 	
 	private void changeOptionActive(String optionActive){
@@ -549,20 +542,6 @@ public class PagoMedicinas extends JFrame {
 	private void hideButtons(){
 		lblPagarConfirm.setVisible(false);
 		btnPagarConfirm.setVisible(false);
-	}
-	
-	private void autogenerateHoraEstado(){
-		date = new Date();
-//		txtFechaSalida.setText("" + dayFormat.format(date));
-//		txtHoraSalida.setText("" + hourFormat.format(date));
-	}
-	
-	private int diffDate(Date fechaIngreso, Date fechaSalida){
-		long startTime = fechaIngreso.getTime();
-		long endTime = fechaSalida.getTime();
-		long diffTime = endTime - startTime;
-		long diffDays = diffTime / (1000 * 60 * 60 * 24);
-		return (int)diffDays;
 	}
 	
 	private void imprimir(String info){

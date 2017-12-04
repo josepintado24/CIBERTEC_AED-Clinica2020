@@ -49,7 +49,7 @@ public class PagoInternamiento extends JFrame {
 	InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
 	MantenimientoPacientesController paciente = new MantenimientoPacientesController("pacientes.txt");
 	MantenimientoCamasController cama = new MantenimientoCamasController("camas.txt");
-	BuscadorPacienteInternamiento buscadorPaciente = new BuscadorPacienteInternamiento();
+	BuscadorPacienteInternamiento buscadorInternamiento = new BuscadorPacienteInternamiento();
 	BuscadorCama buscadorCama = new BuscadorCama();
 	DateFormat hourFormat = new SimpleDateFormat("HH:mm");
 	DateFormat dayFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -134,7 +134,7 @@ public class PagoInternamiento extends JFrame {
 	 * Create the frame.
 	 */
 	public PagoInternamiento() {
-		buscadorPaciente.setVisible(false);
+		buscadorInternamiento.setVisible(false);
 		buscadorCama.setVisible(false);
 		setBackground(Color.WHITE);
 		// Obtener el tamaño de la pantalla
@@ -237,7 +237,7 @@ public class PagoInternamiento extends JFrame {
 		lblCodPaciente = new JLabel("C\u00F3digo de Pac.:");
 		lblCodPaciente.setForeground(Constantes.textgray);
 		lblCodPaciente.setFont(Constantes.regularFont);
-		lblCodPaciente.setBounds(25, 217, 94, 35);
+		lblCodPaciente.setBounds(25, 217, 110, 35);
 		contentPane.add(lblCodPaciente);
 		
 		lblPaciente = new JLabel("Paciente:");
@@ -325,6 +325,7 @@ public class PagoInternamiento extends JFrame {
 						tabla.addRow(data);
 						infoPago();
 						resetFields();
+						buscadorInternamiento = new BuscadorPacienteInternamiento();
 					}
 				}
 				catch(Exception er){
@@ -361,7 +362,7 @@ public class PagoInternamiento extends JFrame {
 		lblSelectCodPaciente.setBounds(421, 215, 100, 35);
 		contentPane.add(lblSelectCodPaciente);
 		
-		buscadorPaciente.addWindowListener(new WindowListener() {
+		buscadorInternamiento.addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(java.awt.event.WindowEvent arg0) {
 			}
@@ -379,7 +380,7 @@ public class PagoInternamiento extends JFrame {
 			}
 			@Override
 			public void windowClosed(java.awt.event.WindowEvent arg0) {
-				String code = buscadorPaciente.sendCodPaciente();
+				String code = buscadorInternamiento.sendCodPaciente();
 				Internamiento getInternamiento = internamiento.buscarPorCodigoPaciente(code);
 				Paciente getPaciente = paciente.buscarPorCodigo(code);
 				txtCodPaciente.setText(getInternamiento.getCodPaciente());
@@ -424,8 +425,8 @@ public class PagoInternamiento extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				buscadorPaciente.setVisible(true);
-				String codPaciente = buscadorPaciente.sendCodPaciente();
+				buscadorInternamiento.setVisible(true);
+				String codPaciente = buscadorInternamiento.sendCodPaciente();
 				txtCodPaciente.setText(codPaciente);
 			}
 		});

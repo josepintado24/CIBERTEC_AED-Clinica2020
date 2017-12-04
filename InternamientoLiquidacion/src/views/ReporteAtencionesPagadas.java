@@ -11,6 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -42,6 +43,7 @@ public class ReporteAtencionesPagadas extends JFrame {
 	MantenimientoPacientesController paciente = new MantenimientoPacientesController("pacientes.txt");
 	InternamientoPacientesController internamiento = new InternamientoPacientesController("internamiento.txt");
 	AtencionController atencion = new AtencionController("atencion.txt");
+	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	
 	private JPanel contentPane;
 	private JLabel lblBackground;
@@ -355,7 +357,7 @@ public class ReporteAtencionesPagadas extends JFrame {
 									buscarAtencion.get(i).getCodAtencion(),
 									buscarAtencion.get(i).getCodPaciente(),
 									buscarAtencion.get(i).getFechaAtencion(),
-									buscarAtencion.get(i).getTotalPagar()
+									decimalFormat.format(buscarAtencion.get(i).getTotalPagar())
 								};
 								tabla.addRow(data);
 							}
@@ -373,7 +375,7 @@ public class ReporteAtencionesPagadas extends JFrame {
 									buscarAtencion.get(i).getCodAtencion(),
 									buscarAtencion.get(i).getCodPaciente(),
 									buscarAtencion.get(i).getFechaAtencion(),
-									buscarAtencion.get(i).getTotalPagar()
+									decimalFormat.format(buscarAtencion.get(i).getTotalPagar())
 								};
 								tabla.addRow(data);
 							}
@@ -568,7 +570,7 @@ public class ReporteAtencionesPagadas extends JFrame {
 				getAtencion.get(i).getCodAtencion(),
 				getAtencion.get(i).getCodPaciente(),
 				getAtencion.get(i).getFechaAtencion(),
-				getAtencion.get(i).getTotalPagar()
+				decimalFormat.format(getAtencion.get(i).getTotalPagar())
 			};
 			tabla.addRow(data);
 		}

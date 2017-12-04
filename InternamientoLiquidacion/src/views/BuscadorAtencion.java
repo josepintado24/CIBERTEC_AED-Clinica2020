@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -87,6 +89,32 @@ public class BuscadorAtencion extends JFrame {
 	 * Create the frame.
 	 */
 	public BuscadorAtencion() {
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				atencion = new AtencionController("atencion.txt");
+			}
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			}
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+			}
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+			}
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+			}
+		});
+		
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 450);
