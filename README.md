@@ -39,4 +39,3 @@
 7. *Solo refresca el projet de eclipse y se vera los cambios.*
 
 >![ScreenShot](https://raw.githubusercontent.com/josepintado24/CIBERTEC_IA-VentaPerfumes/master/VentaPerfumes/screenshot/Refresh.jpg)
-
